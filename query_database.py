@@ -17,9 +17,9 @@ def convertDataToJson(mycursor, columnName, value):
 ################
 ## MAIN PROGRAM
 ################
-mydb = pymysql.connect(host='localhost',
+mydb = pymysql.connect(host='pgcpsdb.cciww86edgy9.us-east-1.rds.amazonaws.com',
                       user='root',
-                      password='Inst#490',
+                      password='38kvFH6K20stnYiq7l9z',
                       db='pgcps_environmental_lit',
                       charset='utf8mb4',
                       cursorclass=pymysql.cursors.DictCursor)
