@@ -319,7 +319,7 @@ function loadDataBySchoolName() {
 function updateDatabase() {
 	console.log("Updating database with Google data.");
 	
-	fetch('/updateDatabase')
+	fetch('/https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/updatedatabase')
 		.then(res => {
 		      console.log("Database updated.");
 		      return res;
