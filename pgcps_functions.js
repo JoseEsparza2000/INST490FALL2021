@@ -133,7 +133,7 @@ function populateEnvFeaturesDropDown() {
 function populateSchoolNamesDropDown() {
    console.log("Populating School Name drop-down list.");
 
-   fetch('/getAllData')
+   fetch('https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_database')
    .then(res => res.json())   
    .then(res => {
 	   var schoolNames = new Set(); // Prevents adding duplicate entries
