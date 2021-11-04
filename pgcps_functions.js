@@ -307,26 +307,29 @@ async function displayMarkersBySectionRating(section) {
 
 }
 
-function loadDataBySchoolName() {
+async function loadDataBySchoolName() {
 	console.log("Loading survey data for school.");
 	
 	var myselect = document.getElementById("school_name_filters_drop_down");
 	var schoolName = myselect.options[myselect.selectedIndex].value;
-
+   console.log(schoolName)
 	var mydocumentation = document.getElementById("surveyInfoContent");
 	mydocumentation.innerHTML = ""
-		
-	fetch('/getDataByColumnName?columnName=section1_school_name&value=' + schoolName)   
-		.then(res => res.json())      
-		.then(res => {
-	    	Object.entries(res[0]).forEach(([key, value]) => {		
+	console.log('test')
+	const request = await fetch(dropDown_query+'section1_school_name&value=' + schoolName)   
+   let response = await request.json()
+   response = JSON.parse(response)
+   console.log(response)
+		// .then(res => res.json())      
+		// .then(res => {
+	    	Object.entries(response[0]).forEach(([key, value]) => {		
 	    		let name = JSON_KEY_TO_OPTION_NAMES.get(key)[0];
 	    		let heading = document.createElement("p");
 	    		let text = document.createTextNode(name + " - " + value);
 	    		heading.appendChild(text);
 	    		mydocumentation.appendChild(heading);
 	    	});
-    });
+   //  });
 }
 
 function updateDatabase() {
