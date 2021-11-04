@@ -364,7 +364,7 @@ function clearEnvFeaturesDropDownList() {
 	sel.selectedIndex = 0;
 }
 
-function showDuplicates() {
+async function showDuplicates() {
 	console.log("Display duplicate schools");
 	
 	// Uncheck school rating radio buttons
@@ -375,11 +375,11 @@ function showDuplicates() {
    // NOTE: The first thing we do here is clear the markers from the layer.
    markersLayer.clearLayers();
    
-   fetch('/getDuplicateSchools')   
-      .then(res => res.json())      
-      .then(res => {
-    	  for(var index = 0; index < res.length; index++) {
-    		  var latitude = res[index].latitude;
+   const request = await fetch('/getDuplicateSchools')   
+   let response = await request.json()
+   // response = JSON.parse(response)
+   response.forEach((item) =>{
+      var latitude = res[index].latitude;
     		  var longitude = res[index].longitude;    		  
     		      		 
 	          // Create a marker
@@ -392,11 +392,28 @@ function showDuplicates() {
 	          ).openPopup();
 	          // Add marker to the layer. Not displayed yet.
 	          markersLayer.addLayer(marker);
-	     }
-	     // Display all the markers.
-	     markersLayer.addTo(mymap);
-	     return res;
-      });      
+   })
+      // .then(res => res.json())      
+      // .then(res => {
+    	//   for(var index = 0; index < res.length; index++) {
+    	// 	  var latitude = res[index].latitude;
+    	// 	  var longitude = res[index].longitude;    		  
+    		      		 
+	   //        // Create a marker
+	   //        var marker = L.marker([latitude, longitude]);
+	   //        // Add a popup to the marker
+	   //        marker.bindPopup(
+	   //      		  "<b>" + res[index]['section1_school_name'] + "</b><br>" +	            		 
+		// 	          "Website: <a target='_blank' href='" + res[index].website + "'>" + res[index].website + "</a><br>" +
+		// 	          "<img src='" + res[index].picture + "' style='width: 200px; height: 150px' /><br>"
+	   //        ).openPopup();
+	   //        // Add marker to the layer. Not displayed yet.
+	   //        markersLayer.addLayer(marker);
+	   //   }
+	   //   // Display all the markers.
+	   //   markersLayer.addTo(mymap);
+	   //   return res;
+      // });      
 }
 
 function displayAreaCovered() {
