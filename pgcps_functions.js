@@ -97,8 +97,11 @@ var mymap;
 var markersLayer;
 
 function windowActions(){
+   updateDatabase();
    loadMap();
-   populateEnvFeaturesDropDown(); populateSchoolNamesDropDown(); openHome();
+   populateEnvFeaturesDropDown(); 
+   populateSchoolNamesDropDown(); 
+   openHome();
 }
 
 
@@ -140,16 +143,19 @@ function populateEnvFeaturesDropDown() {
    }
 }
 
-function populateSchoolNamesDropDown() {
+async function populateSchoolNamesDropDown() {
    console.log("Populating School Name drop-down list.");
 
-   fetch(readAPI)
-   .then(res => res.json())   
-   .then(res => {
-	   var schoolNames = new Set(); // Prevents adding duplicate entries
-	   for(var index = 0; index < res.length; index++) {
-		   schoolNames.add(res[index]['section1_school_name']);
-	   }
+   const request = await fetch(readAPI)
+   let response = await request.json()
+   
+   response = JSON.parse(response)
+   const schoolNames = new Set();
+   response.forEach((item) =>{
+      schoolNames.add(item['section1_school_name']);
+   })
+   console.log(typeof(schoolNames))
+   
 	   
      // Add the options to the drop-down and build the documentation page
      var myselect = document.getElementById("school_name_filters_drop_down");
@@ -162,7 +168,7 @@ function populateSchoolNamesDropDown() {
         myselect.appendChild(opt); 
      }
       return schoolNames;
-   }); 
+   
 }
 
 function populateEnvFeaturesDocumentation() {
