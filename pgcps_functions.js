@@ -109,6 +109,7 @@ function windowActions(){
 const updateAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/update_database'
 const readAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_database'
 const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getdatabycolumnname?columnName='
+const getDuplicateSchoolsAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getduplicateschools' 
 
 function loadMap() {
    mymap = L.map('mapid').setView([38.8162729,-76.7523043], 10);   
@@ -375,7 +376,7 @@ async function showDuplicates() {
    // NOTE: The first thing we do here is clear the markers from the layer.
    markersLayer.clearLayers();
    
-   const request = await fetch('/getDuplicateSchools')   
+   const request = await fetch(getDuplicateSchoolsAPI)   
    let response = await request.json()
    // response = JSON.parse(response)
    response.forEach((item) =>{
