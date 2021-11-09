@@ -1,8 +1,10 @@
 // import express JS module into app and creates its variable. 
-const express = require('express');
+import express from 'express';
 const app = express();
 const port = process.env.PORT || 80;
-var path = require('path');
+import { join } from 'path';
+import {spawn} from 'child_process'
+// var spawn = require("child_process").spawnSync
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -19,7 +21,7 @@ app.get('/updateDatabase', (req, res) => {
     // Parameters passed in spawn - 
     // 1. type_of_script 
     // 2. list containing Path of the script and arguments for the script
-	var spawn = require("child_process").spawnSync;
+	// var spawn = require("child_process").spawnSync;
     var process = spawn('python' ,["./update_database.py"]);    
     res.send(JSON.parse(process.stdout.toString()));
 });
@@ -31,7 +33,7 @@ app.get('/getAllData', (req, res) => {
     // Parameters passed in spawn - 
     // 1. type_of_script 
     // 2. list containing Path of the script and arguments for the script
-	var spawn = require("child_process").spawnSync;
+	// var spawn = require("child_process").spawnSync;
     var process = spawn('python' ,["./read_all_database.py"]);    
     res.send(JSON.parse(process.stdout.toString()));
 });
@@ -44,8 +46,9 @@ app.get('/getDataByColumnName', (req, res) => {
     // Parameters passed in spawn - 
     // 1. type_of_script 
     // 2. list containing Path of the script and arguments for the script
-	var spawn = require("child_process").spawnSync;
+	// var spawn = require("child_process").spawnSync;
     var process = spawn('python' ,["./query_database.py", req.query.columnName, req.query.value]);
+    // console.log(process.stdout.toString())
     res.send(JSON.parse(process.stdout.toString()));
 });
 
@@ -56,17 +59,17 @@ app.get('/getDuplicateSchools', (req, res) => {
     // Parameters passed in spawn - 
     // 1. type_of_script 
     // 2. list containing Path of the script and arguments for the script
-	var spawn = require("child_process").spawnSync;
+	// var spawn = require("child_process").spawnSync;
     var process = spawn('python' ,["./query_duplicates_database.py"]);    
     res.send(JSON.parse(process.stdout.toString()));
 });
 
 // This is in case someone tries to use a PUT command 
 app.put("/", (req, res) => {
-	res.sendFile(path.join(__dirname + '/index.html'));
+	res.sendFile(join(__dirname + '/index.html'));
 });
 
 // This is in case someone tries to use a POST command
 app.post("/", (req, res) => {
-	res.sendFile(path.join(__dirname + '/index.html'));
+	res.sendFile(join(__dirname + '/index.html'));
 });

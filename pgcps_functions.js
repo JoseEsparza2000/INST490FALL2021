@@ -1,4 +1,3 @@
-
 const JSON_KEY_TO_OPTION_NAMES = new Map([
     ["section1_time_stamp", ["Section 1: Time Stamp", ""]],
     ["section1_email", ["Section 1: Email", ""]],
@@ -97,6 +96,21 @@ const JSON_KEY_TO_OPTION_NAMES = new Map([
 var mymap;
 var markersLayer;
 
+function windowActions(){
+   // updateDatabase();
+   loadMap();
+   populateEnvFeaturesDropDown(); 
+   populateSchoolNamesDropDown(); 
+   openHome();
+}
+
+
+
+const updateAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/update_database'
+const readAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_database'
+const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getdatabycolumnname?columnName='
+const getDuplicateSchoolsAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getduplicateschools' 
+
 function loadMap() {
    mymap = L.map('mapid').setView([38.8162729,-76.7523043], 10);   
    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -130,16 +144,21 @@ function populateEnvFeaturesDropDown() {
    }
 }
 
-function populateSchoolNamesDropDown() {
+async function populateSchoolNamesDropDown() {
    console.log("Populating School Name drop-down list.");
 
-   fetch('/getAllData')
-   .then(res => res.json())   
-   .then(res => {
-	   var schoolNames = new Set(); // Prevents adding duplicate entries
-	   for(var index = 0; index < res.length; index++) {
-		   schoolNames.add(res[index]['section1_school_name']);
-	   }
+   const request = await fetch(readAPI)
+   
+   // let respons = await request.json()
+   let response = JSON.parse(await request.json())
+   console.log(typeof(response))
+   // response = JSON.parse(response)
+   const schoolNames = new Set();
+   response.forEach((item) =>{
+      schoolNames.add(item['section1_school_name']);
+   })
+
+   
 	   
      // Add the options to the drop-down and build the documentation page
      var myselect = document.getElementById("school_name_filters_drop_down");
@@ -152,7 +171,7 @@ function populateSchoolNamesDropDown() {
         myselect.appendChild(opt); 
      }
       return schoolNames;
-   }); 
+   
 }
 
 function populateEnvFeaturesDocumentation() {
@@ -184,7 +203,7 @@ function populateEnvFeaturesDocumentation() {
 	}
 }
 
-function displayMarkersByFeature() {
+async function displayMarkersByFeature() {
 	// Uncheck school rating radio buttons
 	clearSchoolRatingsSelection()
     
@@ -196,32 +215,31 @@ function displayMarkersByFeature() {
    // NOTE: The first thing we do here is clear the markers from the layer.
    markersLayer.clearLayers();
    
-   fetch('/getDataByColumnName?columnName=' + feature + "&value=Yes")   
-      .then(res => res.json())      
-      .then(res => {
-    	  for(var index = 0; index < res.length; index++) {
-    		  var latitude = res[index].latitude;
-    		  var longitude = res[index].longitude;    		  
+   const request = await fetch(dropDown_query + feature + "&value=Yes")   
+   let response = JSON.parse(await request.json())
+   // response = JSON.parse(response)
+
+   response.forEach((item) => {
+      const latitude = item.latitude;
+    		const longitude = item.longitude;    		  
     		  
-    		  if(feature.toLowerCase().length > 0) {
-		          if(res[index][feature].toLowerCase() == "yes") {
-			          // Create a marker
-			          var marker = L.marker([latitude, longitude]);
+    		if(feature.toLowerCase().length > 0) {
+		         if(item[feature].toLowerCase() == "yes") {
+			         // Create a marker
+			         const marker = L.marker([latitude, longitude]);
 			          // Add a popup to the marker
-			          marker.bindPopup(
-			                "<b>" + res[index]['section1_school_name'] + "</b><br>" +
-			                "Website: <a target='_blank' href='" + res[index].website + "'>" + res[index].website + "</a><br>" +
-			                "<img src='" + res[index].picture + "' style='width: 200px; height: 150px' /><br>"
-			          ).openPopup();
-			          // Add marker to the layer. Not displayed yet.
-			          markersLayer.addLayer(marker);
-			       }
-    		  }
-	     }
+			         marker.bindPopup(
+			            "<b>" + item['section1_school_name'] + "</b><br>" +
+			            "Website: <a target='_blank' href='" + item.website + "'>" + item.website + "</a><br>" +
+			            "<img src='" + item.picture + "' style='width: 200px; height: 150px' /><br>"
+			         ).openPopup();
+			         // Add marker to the layer. Not displayed yet.
+			         markersLayer.addLayer(marker);
+			      }
+    		}
 	     // Display all the markers.
 	     markersLayer.addTo(mymap);
-	     return res;
-      });      
+      })  
 }
 
 function countYesForSection(schoolData, section) {
@@ -253,7 +271,7 @@ function countYesForSection(schoolData, section) {
 	return counter;
 }
 
-function displayMarkersBySectionRating(section) {
+async function displayMarkersBySectionRating(section) {
    console.log("Displaying markers for school rating section: " + section);
    
    // Set environmental features drop-down list to None
@@ -261,14 +279,17 @@ function displayMarkersBySectionRating(section) {
    
    // NOTE: The first thing we do here is clear the markers from the layer.
    markersLayer.clearLayers();
+   // console.log('test')
+   const request = await fetch(readAPI)
+   let response = JSON.parse(await request.json())
    
-   fetch('/getAllData')
-      .then(res => res.json())      
-      .then(res => {
-         for(var index = 0; index < res.length; index++) {
-        	 let numberYes = countYesForSection(res[index], section);        	 
-        	 let latitude = res[index].latitude;
-        	 let longitude = res[index].longitude;
+   // response = JSON.parse(response)
+   // console.log(typeof(response))
+
+   response.forEach((item) =>{
+      let numberYes = countYesForSection(item, section);        	 
+        	 let latitude = item.latitude;
+        	 let longitude = item.longitude;
 
              let circle = L.circle([latitude, longitude], {
             	 color: 'red',
@@ -279,47 +300,50 @@ function displayMarkersBySectionRating(section) {
               
              // Add a popup to the circle
              circle.bindPopup(
-            		 "<b>" + res[index]['section1_school_name'] + "</b><br>" +
+            		 "<b>" + item['section1_school_name'] + "</b><br>" +
             		 "Total Yes: " + numberYes + "<br>" +
-		             "Website: <a target='_blank' href='" + res[index].website + "'>" + res[index].website + "</a><br>" +
-		             "<img src='" + res[index].picture + "' style='width: 200px; height: 150px' /><br>"		                
+		             "Website: <a target='_blank' href='" + item.website + "'>" + item.website + "</a><br>" +
+		             "<img src='" + item.picture + "' style='width: 200px; height: 150px' /><br>"		                
              ).openPopup();
               
              // Add marker to the layer. Not displayed yet.
              markersLayer.addLayer(circle);             
-         }
+         
          // Display all the markers.
          markersLayer.addTo(mymap);
-         return res;
-      });
+         // return res;
+   })
+
 }
 
-function loadDataBySchoolName() {
+async function loadDataBySchoolName() {
 	console.log("Loading survey data for school.");
 	
 	var myselect = document.getElementById("school_name_filters_drop_down");
 	var schoolName = myselect.options[myselect.selectedIndex].value;
-
+   console.log(schoolName)
 	var mydocumentation = document.getElementById("surveyInfoContent");
 	mydocumentation.innerHTML = ""
-		
-	fetch('/getDataByColumnName?columnName=section1_school_name&value=' + schoolName)   
-		.then(res => res.json())      
-		.then(res => {
-	    	Object.entries(res[0]).forEach(([key, value]) => {		
+	console.log('test')
+	const request = await fetch(dropDown_query+'section1_school_name&value=' + schoolName)   
+   let response = JSON.parse(await request.json())
+   // response = JSON.parse(response)
+   console.log(response)
+
+	    	Object.entries(response[0]).forEach(([key, value]) => {		
 	    		let name = JSON_KEY_TO_OPTION_NAMES.get(key)[0];
 	    		let heading = document.createElement("p");
 	    		let text = document.createTextNode(name + " - " + value);
 	    		heading.appendChild(text);
 	    		mydocumentation.appendChild(heading);
 	    	});
-    });
+
 }
 
 function updateDatabase() {
 	console.log("Updating database with Google data.");
 	
-	fetch('/updateDatabase')
+	fetch(updateAPI)
 		.then(res => {
 		      console.log("Database updated.");
 		      return res;
@@ -342,7 +366,7 @@ function clearEnvFeaturesDropDownList() {
 	sel.selectedIndex = 0;
 }
 
-function showDuplicates() {
+async function showDuplicates() {
 	console.log("Display duplicate schools");
 	
 	// Uncheck school rating radio buttons
@@ -353,35 +377,33 @@ function showDuplicates() {
    // NOTE: The first thing we do here is clear the markers from the layer.
    markersLayer.clearLayers();
    
-   fetch('/getDuplicateSchools')   
-      .then(res => res.json())      
-      .then(res => {
-    	  for(var index = 0; index < res.length; index++) {
-    		  var latitude = res[index].latitude;
-    		  var longitude = res[index].longitude;    		  
+   const request = await fetch(getDuplicateSchoolsAPI)   
+   let response = JSON.parse(await request.json())
+   // response = JSON.parse(response)
+   response.forEach((item) =>{
+      const latitude = item.latitude;
+    	const longitude = item.longitude;    		  
     		      		 
 	          // Create a marker
-	          var marker = L.marker([latitude, longitude]);
+	   const marker = L.marker([latitude, longitude]);
 	          // Add a popup to the marker
-	          marker.bindPopup(
-	        		  "<b>" + res[index]['section1_school_name'] + "</b><br>" +	            		 
-			          "Website: <a target='_blank' href='" + res[index].website + "'>" + res[index].website + "</a><br>" +
-			          "<img src='" + res[index].picture + "' style='width: 200px; height: 150px' /><br>"
-	          ).openPopup();
+	   marker.bindPopup(
+	   "<b>" + item['section1_school_name'] + "</b><br>" +	            		 
+		"Website: <a target='_blank' href='" + item.website + "'>" + item.website + "</a><br>" +
+		"<img src='" + item.picture + "' style='width: 200px; height: 150px' /><br>"
+	   ).openPopup();
 	          // Add marker to the layer. Not displayed yet.
-	          markersLayer.addLayer(marker);
-	     }
-	     // Display all the markers.
-	     markersLayer.addTo(mymap);
-	     return res;
-      });      
+	   markersLayer.addLayer(marker);
+   })
+ 
 }
 
 function displayAreaCovered() {
-   fetch('/getAllData')
+   fetch('https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_database')
    .then(res => res.json())  
    .then(res => {
       // Used PG County Atlas to get most of the coordinates.  https://www.pgatlas.com/
+      // 38.7286251,-76.9695288
       var polygon = L.polygon([
     	  [39.1297476, -76.8878470],
     	  [38.9658582, -77.0028848],
@@ -465,3 +487,4 @@ function loadSurveyInfoPage() {
 function loadDocumentationPage() {
    document.getElementById("documentation").innerHTML='<object type="text/html" data="documentation.html" width="100%" height="400px"></object>';
 }
+window.onload = windowActions
