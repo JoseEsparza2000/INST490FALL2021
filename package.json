@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "command": "^0.0.1",
-    "eslint": "^8.1.0",
     "express": "^4.17.1",
     "livereload": "^0.9.3",
     "node-fetch": "^2.6.0",
@@ -30,5 +29,10 @@
   "bugs": {
     "url": "https://github.com/asandin218/pgcps_enviro_literacy490/issues"
   },
-  "homepage": "https://github.com/asandin218/pgcps_enviro_literacy490#readme"
+  "homepage": "https://github.com/asandin218/pgcps_enviro_literacy490#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint": "^8.2.0"
+  }
 }
