@@ -97,7 +97,7 @@ var mymap;
 var markersLayer;
 
 function windowActions(){
-   updateDatabase();
+   // updateDatabase();
    loadMap();
    populateEnvFeaturesDropDown(); 
    populateSchoolNamesDropDown(); 
@@ -148,14 +148,16 @@ async function populateSchoolNamesDropDown() {
    console.log("Populating School Name drop-down list.");
 
    const request = await fetch(readAPI)
-   let response = await request.json()
    
-   response = JSON.parse(response)
+   // let respons = await request.json()
+   let response = JSON.parse(await request.json())
+   console.log(typeof(response))
+   // response = JSON.parse(response)
    const schoolNames = new Set();
    response.forEach((item) =>{
       schoolNames.add(item['section1_school_name']);
    })
-   console.log(typeof(schoolNames))
+
    
 	   
      // Add the options to the drop-down and build the documentation page
@@ -214,8 +216,8 @@ async function displayMarkersByFeature() {
    markersLayer.clearLayers();
    
    const request = await fetch(dropDown_query + feature + "&value=Yes")   
-   let response = await request.json()
-   response = JSON.parse(response)
+   let response = JSON.parse(await request.json())
+   // response = JSON.parse(response)
 
    response.forEach((item) => {
       const latitude = item.latitude;
@@ -277,12 +279,12 @@ async function displayMarkersBySectionRating(section) {
    
    // NOTE: The first thing we do here is clear the markers from the layer.
    markersLayer.clearLayers();
-   console.log('test')
+   // console.log('test')
    const request = await fetch(readAPI)
-   let response = await request.json()
+   let response = JSON.parse(await request.json())
    
-   response = JSON.parse(response)
-   console.log(typeof(response))
+   // response = JSON.parse(response)
+   // console.log(typeof(response))
 
    response.forEach((item) =>{
       let numberYes = countYesForSection(item, section);        	 
@@ -324,11 +326,10 @@ async function loadDataBySchoolName() {
 	mydocumentation.innerHTML = ""
 	console.log('test')
 	const request = await fetch(dropDown_query+'section1_school_name&value=' + schoolName)   
-   let response = await request.json()
-   response = JSON.parse(response)
+   let response = JSON.parse(await request.json())
+   // response = JSON.parse(response)
    console.log(response)
-		// .then(res => res.json())      
-		// .then(res => {
+
 	    	Object.entries(response[0]).forEach(([key, value]) => {		
 	    		let name = JSON_KEY_TO_OPTION_NAMES.get(key)[0];
 	    		let heading = document.createElement("p");
@@ -336,7 +337,7 @@ async function loadDataBySchoolName() {
 	    		heading.appendChild(text);
 	    		mydocumentation.appendChild(heading);
 	    	});
-   //  });
+
 }
 
 function updateDatabase() {
@@ -377,44 +378,24 @@ async function showDuplicates() {
    markersLayer.clearLayers();
    
    const request = await fetch(getDuplicateSchoolsAPI)   
-   let response = await request.json()
+   let response = JSON.parse(await request.json())
    // response = JSON.parse(response)
    response.forEach((item) =>{
-      var latitude = res[index].latitude;
-    		  var longitude = res[index].longitude;    		  
+      const latitude = item.latitude;
+    	const longitude = item.longitude;    		  
     		      		 
 	          // Create a marker
-	          var marker = L.marker([latitude, longitude]);
+	   const marker = L.marker([latitude, longitude]);
 	          // Add a popup to the marker
-	          marker.bindPopup(
-	        		  "<b>" + res[index]['section1_school_name'] + "</b><br>" +	            		 
-			          "Website: <a target='_blank' href='" + res[index].website + "'>" + res[index].website + "</a><br>" +
-			          "<img src='" + res[index].picture + "' style='width: 200px; height: 150px' /><br>"
-	          ).openPopup();
+	   marker.bindPopup(
+	   "<b>" + item['section1_school_name'] + "</b><br>" +	            		 
+		"Website: <a target='_blank' href='" + item.website + "'>" + item.website + "</a><br>" +
+		"<img src='" + item.picture + "' style='width: 200px; height: 150px' /><br>"
+	   ).openPopup();
 	          // Add marker to the layer. Not displayed yet.
-	          markersLayer.addLayer(marker);
+	   markersLayer.addLayer(marker);
    })
-      // .then(res => res.json())      
-      // .then(res => {
-    	//   for(var index = 0; index < res.length; index++) {
-    	// 	  var latitude = res[index].latitude;
-    	// 	  var longitude = res[index].longitude;    		  
-    		      		 
-	   //        // Create a marker
-	   //        var marker = L.marker([latitude, longitude]);
-	   //        // Add a popup to the marker
-	   //        marker.bindPopup(
-	   //      		  "<b>" + res[index]['section1_school_name'] + "</b><br>" +	            		 
-		// 	          "Website: <a target='_blank' href='" + res[index].website + "'>" + res[index].website + "</a><br>" +
-		// 	          "<img src='" + res[index].picture + "' style='width: 200px; height: 150px' /><br>"
-	   //        ).openPopup();
-	   //        // Add marker to the layer. Not displayed yet.
-	   //        markersLayer.addLayer(marker);
-	   //   }
-	   //   // Display all the markers.
-	   //   markersLayer.addTo(mymap);
-	   //   return res;
-      // });      
+ 
 }
 
 function displayAreaCovered() {
@@ -422,6 +403,7 @@ function displayAreaCovered() {
    .then(res => res.json())  
    .then(res => {
       // Used PG County Atlas to get most of the coordinates.  https://www.pgatlas.com/
+      // 38.7286251,-76.9695288
       var polygon = L.polygon([
     	  [39.1297476, -76.8878470],
     	  [38.9658582, -77.0028848],
