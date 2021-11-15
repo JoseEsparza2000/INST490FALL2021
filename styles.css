@@ -3,6 +3,10 @@ body, html {
   font-family: "Inconsolata", sans-serif;
 }
 
+.navbar-menu {
+	background-color: #48c78e;
+}
+
 .bgimg {
   background-position: center;
   background-size: cover;
@@ -773,17 +777,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 
-/* div icon */
+/* div icon
 
 .leaflet-div-icon {
 	background: #fff;
 	border: 1px solid #666;
-	}
+	} */
 
 
 /* Tooltip */
 /* Base styles for the element that has a tooltip */
-.leaflet-tooltip {
+/* .leaflet-tooltip {
 	position: absolute;
 	padding: 6px;
 	background-color: #fff;
@@ -811,11 +815,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	border: 6px solid transparent;
 	background: transparent;
 	content: "";
-	}
+	} */
 
 /* Directions */
 
-.leaflet-tooltip-bottom {
+/* .leaflet-tooltip-bottom {
 	margin-top: 6px;
 }
 .leaflet-tooltip-top {
@@ -857,4 +861,4 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	left: 0;
 	margin-left: -12px;
 	border-right-color: #fff;
-	}
+	} */

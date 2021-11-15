@@ -25,7 +25,7 @@ result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                             range="Form Responses 1!A1:BN67").execute()
 # only get the values                         
 values = result.get('values', [])
-#print(values)
+# print(values)
 
 if not values:
     print('No data found.')
