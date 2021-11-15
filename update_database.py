@@ -156,7 +156,7 @@ KNOWN_SCHOOLS_INFO = [
     ["Gladys Noon Spellman Elementary", 38.9308, -76.9095,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Gladys Noon Spellman.jpg", "https://www.pgcps.org/gladysnoonspellman/"],
     ["Glassmanor Elementary", 38.8171, -76.9924,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Glassmanor ES.jpg", "https://www.pgcps.org/glassmanor/"],
     ["Greenbelt Elementary", 39.0123162, -76.8793746,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Greenbelt ES.jpg", "https://www.pgcps.org/greenbeltes/"],
-    ["Gwynn Park High School", 38.70181596482359, -76.86965401525828,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Gwynn Park HS.jpg", "https://www.pgcps.org/gwynnparkhs/"],
+    ["Gwynn Park High School", 38.70227649308078, -76.86985786136302,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Gwynn Park HS.jpg", "https://www.pgcps.org/gwynnparkhs/"],
     ["Gwynn Park MS", 38.7069, -76.8709,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Middle_Schools/Gwynn_Park/Rotating_Stories/schoolphoto 2.jpg?n=9313", "https://www.pgcps.org/gwynnparkms/"],
     ["High Bridge Elementary", 38.9868884, -76.7745284,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/High Bridge ES.jpg", "https://www.pgcps.org/highbridge/"],
     ["Highland Park ES", 38.9035, -76.8960,"https://www.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Highland Park ES.jpg", "https://www.pgcps.org/highlandpark/"],
