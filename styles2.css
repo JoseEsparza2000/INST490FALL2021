@@ -2,6 +2,9 @@
     max-width: 100%;
     height:800px;
 }
+.middle-section{
+    padding-top: 1rem;
+}
 
 @media (min-width: 501px) {
   
@@ -10,12 +13,16 @@
         font-size: 1.5em !important;
         min-height: 2.35rem; 
         margin-top: 10px;
-        margin-left: 35px;
+        margin-left: 505px;
     }
     #mapid {
         max-width: 100%;
         height:800px;
     }
+
+    /* .middle-section{
+        padding-top: 1rem;
+    } */
 
         /* .navbar.container{
             min-height: 2rem !important;
@@ -37,6 +44,10 @@
     .columns{
         display:flex;
         justify-content:start;
+    }
+    .navbrand-container{
+        display: flex;
+        justify-content: space-between;
     }
 }
 
@@ -65,6 +76,14 @@
     #mapid {
         max-width: 100%;
         height:500px;
+    }
+
+    .navbar-brand{
+        max-width: 80px;
+    }
+    .navbrand-container{
+        display: flex;
+        justify-content: space-between;
     }
 
     /* .navbar-brand{

@@ -27,22 +27,31 @@
       <div class="section top-section">
          <div class="container">
             <nav class="navbar has-shadow is-success is-fixed-top">
-               <div class="navbar-brand">
-                  <span class="navbar-item">
-                     <img src="/images/WS_logo.png" alt="" style="max-height: 40px;" class='px-2'>
-                  </span>
-                  <a role="button" class="navbar-burger"  id="burger" aria-label="menu" aria-expanded="false" data-target="navLinks">
-                     <span aria-hidden="true"></span>
-                     <span aria-hidden="true"></span>
-                     <span aria-hidden="true"></span> 
-                  </a>
-               </div>
-               <div class="container has-text-centered has-text-primary-light" id="HomeTitle">
-                  <!-- <div class="he"> -->
+               <div class="navbrand-container">
+                  <div class="navbar-brand">
+                     <span class="navbar-item">
+                        <img src="/images/WS_logo.png" alt="" style="max-height: 40px;" class='px-2'>
+                     </span>
+                  </div>  
+
+                  <div class="container has-text-centered has-text-primary-light" id="HomeTitle">
+
                      <h2>PGCPS Green Literacy Tracker</h2>
-                  <!-- </div> -->
+
                   
+                  </div>
+                  <div class="navbar-brand">
+                     <a role="button" class="navbar-burger"  id="burger" aria-label="menu" aria-expanded="false" data-target="navLinks">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span> 
+                     </a>
+                  </div>  
                </div>
+               
+                  
+               
+               
                <div class="navbar-menu" id="navLinks">
                   <!-- <div class="navbar-start"> -->
                      
@@ -131,18 +140,18 @@
                   </div>
                </div>
 
-               <!-- <div class="box has-background-success"> -->
+               <div class="box has-background-success has-text-centered">
                   <div class="buttons">
                      <button class="button">PGC Perimeter</button>
-                     <button class="button">Update Database</button>
+                     <!-- <button class="button">Update Database</button> -->
                      <button class="button">Show Duplicates</button>
                   </div>
-               <!-- </div> -->
+               </div>
                
             </div>
 
             <div class="column" id="map">
-               <div class="container">
+               <div class="container ">
                   <div id="mapid" class="map"></div>
                </div>
             </div>
