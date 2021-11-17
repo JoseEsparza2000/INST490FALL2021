@@ -19,9 +19,9 @@ while index < len(res):
 
     table.put_item(
         Item={
+            'schoolNames' : valueList[2],
             'Timestamp' : valueList[0],
             'Email Address': valueList[1],
-            'School Names' : valueList[2],
             'MD Green School Certification' : valueList[3],
             'Active Garden' : valueList[4],
             'Actively Recycle' : valueList[5],
