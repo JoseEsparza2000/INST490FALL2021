@@ -16,7 +16,7 @@ with open ('column_names.json', 'r') as f:
     col_names = json.load(f)
     
 for i in range(10):
-    if res[i]["Does your school have an active garden? (Check all that apply)"].find('Vegetable garden') == 0:
+    if res[i]["Does your school have an active garden? (Check all that apply)"].find('Vegetable garden') == -1:
         print(res[i]["Does your school have an active garden? (Check all that apply)"])
         
 ACTIVE_GARDENS = [
