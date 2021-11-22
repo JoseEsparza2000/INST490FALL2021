@@ -329,4 +329,3 @@ rowValues = getValuesFromGoogle()
 populateDatabase(rowValues[2:])
 
 print('[{"status":"Database updated."}]')
-#test
