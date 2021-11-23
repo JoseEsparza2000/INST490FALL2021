@@ -16,12 +16,6 @@ res = worksheet.get_all_records()
 num_of_cols = worksheet.col_count
 with open ('column_names.json', 'r') as f:
     col_names = json.load(f)
-    
-
-for i in range(10):
-    if res[i]["Does your school have an active garden? (Check all that apply)"].find('Vegetable garden') == -1:
-        print(res[i]["Does your school have an active garden? (Check all that apply)"])
-
 
         
 ACTIVE_GARDENS = [
@@ -165,226 +159,123 @@ db_columnNames = [
     "picture",
     "website"
 ]
-# print(res[65])
-# for i in range(len(res)):
-#     print(i)
+
 
 client = boto3.resource('dynamodb')
 table = client.Table('testdb')
-input = {"section1_time_stamp":"test",
-        "section1_email":"test",
-        "section1_school_name":"test",
-        "section1_green_school_certification":"test",
-        "section1_active_garden_vegetable_garden":"test",
-        "section1_active_garden_native_garden":"test",
-        "section1_active_garden_butterfly_garden":"test",
-        "section1_active_garden_rain_garden":"test",
-        "section1_active_garden_zen_garden":"test",
-        "section1_active_garden_herb_garden":"test",
-        "section1_active_garden_no_gardens_on_campus":"test",
-        "section1_active_garden_dont_know":"test",
-        "section1_recycle_at_breakfast":"test",
-        "section1_recycle_at_lunch":"test",
-        "section1_recycle_in_the_classroom":"test",
-        "section1_recycle_not_at_all":"test",
-        "section1_recycle_dont_know":"test",
-        "section1_recycling_program_ink_cartridge_recycling":"test",
-        "section1_recycling_program_phones_batteries_other":"test",
-        "section1_recycling_program_terra_cycling":"test",
-        "section1_recycling_program_color_cycle_crayola":"test",
-        "section1_recycling_program_pepsi_recycle_rally":"test",
-        "section1_recycling_program_none_programs_activities":"test",
-        "section1_recycling_program_dont_know":"test",
-        "section1_composting_we_did_not_compost_at_our_school":"test",
-        "section1_composting_vermiculture":"test",
-        "section1_composting_drum_compost":"test"
-        
-    }
 
 # for i in range(10):
-# for i in range(len(res)):
-#     input2 = {'pkey':i,
-#               'section1_time_stamp': res[i]['Timestamp'],
-#               "section1_email":res[i]['Email Address'],
-#               "section1_green_school_certification":res[i]['Does your school have a MD Green School Certification?'],
-#               "section1_active_garden_vegetable_garden":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], "Vegetable garden")
-#               }
-#     table.put_item(Item=input2)
+for i in range(len(res)):
+    input2 = {  "pkey":i+1,
+                "section_1_school_name":res[i]['What is the name of your school? '],
+                "section1_time_stamp": res[i]['Timestamp'],
+                "section1_email":res[i]['Email Address'],
+                "section1_green_school_certification":res[i]['Does your school have a MD Green School Certification?'],
+                "section1_active_garden_vegetable_garden":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[0]),
+                "section1_active_garden_native_garden":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[1]),
+                "section1_active_garden_butterfly_garden":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[2]),
+                "section1_active_garden_rain_garden":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[3]),
+                "section1_active_garden_zen_garden":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[4]),
+                "section1_active_garden_herb_garden":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[5]),
+                "section1_active_garden_no_gardens_on_campus":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[6]),
+                "section1_active_garden_dont_know":getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[7]),
+                "section1_recycle_at_breakfast":getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[0]),
+                "section1_recycle_at_lunch":getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[1]),
+                "section1_recycle_in_the_classroom":getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[2]),
+                "section1_recycle_not_at_all":getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[3]),
+                "section1_recycle_dont_know":getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[4]),
+                "section1_recycling_program_ink_cartridge_recycling":getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[0]),
+                "section1_recycling_program_phones_batteries_other":getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[1]),
+                "section1_recycling_program_terra_cycling":getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[2]),
+                "section1_recycling_program_color_cycle_crayola":getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[3]),
+                "section1_recycling_program_pepsi_recycle_rally":getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[4]),
+                "section1_recycling_program_none_programs_activities":getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[5]),
+                "section1_recycling_program_dont_know":getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[6]),
+                "section1_composting_we_did_not_compost_at_our_school":getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[0]),
+                "section1_composting_vermiculture":getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[1]),
+                "section1_composting_drum_compost":getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[2]),
+                "section1_composting_open_frame":getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[3]),
+                "section1_composting_send_compost_local_facility_farm":getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[4]),
+                "section1_composting_dont_know":getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[5]),
+                "section1_cleanup_volunteer_effort":res[i]['Does your school participate in environmental cleanup volunteer efforts?'],
+                "section1_waste_reduction_comments":res[i]['Waste Reduction:  Other and Comments, also please explain if your school participates in other waste reduction efforts. '],
+                "section2_reducing_water_strategy":res[i]['Are strategies implemented to reduce water use in your school? '],
+                "section2_stream":res[i]['Do you have a stream located on your school grounds? '],
+                "section2_water_prevention_stream_bank_planting":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Stream Bank Planting (Riparian Buffer)]'],
+                "section2_water_prevention_erosion_control_project":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Erosion Control Project other than Stream Bank Planting]'],
+                "section2_water_prevention_painted_storm_drains":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Painted Storm Drains]'],
+                "section2_water_prevention_raingarden_bioretention_area_planted":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Raingarden/bioretention area planted]'],
+                "section2_water_prevention_no_mow_zone":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [No-mow zone installed ]'],
+                "section2_water_prevention_rain_barrels":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Rain barrels installed]'],
+                "section2_water_prevention_stream_cleaning":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Stream Cleaning (at your school or in the community)]'],
+                "section2_water_prevention_collected_litter":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Collected litter to prevent water pollution]'],
+                "section2_water_prevention_turf_eduction":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Turf Eduction]'],
+                "section2_water_prevention_surface_reduction":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Impervious surface reduction]'],
+                "section2_water_prevention_green_roof":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Green Roof]'],
+                "section2_water_prevention_retrofitted_sink_toilet_showers":res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Retrofitted sinks, toilets, showers]'],
+                "section2_runoff_strategy":res[i]['Does your school implement strategies to reduce or improve runoff from the school grounds?'],
+                "section2_water_conservation_comments":res[i]['Water Conservation:  Other and Comments, also please indicate if storm water management has been done or is taking place at your school on what has been/is being done.'],
+                "section3_reduce_energy_strategy":res[i]['Does your school implement strategies to reduce energy use?'],
+                "section3_energy_conservation_installed_efficient_lighting":res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Installed efficient lighting]'],
+                "section3_energy_conservation_use_daylighting":res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Use Daylighting most of the day]'],
+                "section3_energy_conservation_delamped":res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Delamped]'],
+                "section3_energy_conservation_planted_tree_shading":res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Planted trees to shade building]'],
+                "section3_energy_conservation_use_of_blinds":res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Use of blinds in the classroom to control daylight and temperature]'],
+                "section3_renewable_energy":res[i]['Does your school use renewable energy sources?'],
+                "section3_renewable_source_solar":res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Solar]'],
+                "section3_renewable_source_wind":res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Wind]'],
+                "section3_renewable_source_geothermal":res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Geothermal]'],
+                "section3_energy_conservation_comments":res[i]['Energy Conservation:  Other and Comments, also please indicate if additional energy conservation practices or renewable energy sources are being implemented at your school. '],
+                "section4_restore_habitat":res[i]['Did you restore habitat on your school grounds? '],
+                "section4_habitat_restoration_created_bird_houses":res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Created/Installed bird houses]'],
+                "section4_habitat_restoration_planted_native_trees":res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Planted Native Trees]'],
+                "section4_habitat_restoration_planted_native_shrubs":res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Planted Native Shrubs]'],
+                "section4_habitat_restoration_removal_invasive_species":res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Removal of invasive species]'],
+                "section4_habitat_restoration_created_native_habitat":res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Created native habitat - meadows, wetlands or forests]'],
+                "section4_habit_restoration_comments":res[i]['Habitat Restoration:  Other and Comments, please describe other habitat restoration efforts at your school or that your school has done in the community. '],
+                "section4_enviro_learning_structures":res[i]['Does your school have structures for environmental learning on the school grounds? '],
+                "section4_env_learn_struct_interpretive_signage":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Interpretive signage]'],
+                "section4_env_learn_struct_trails_pathways":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Trails, pathways]'],
+                "section4_env_learn_struct_boardwalk_bridges":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Boardwalk, bridges]'],
+                "section4_env_learn_struct_tree_plant_id_tags":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Tree/Plant ID Tags]'],
+                "section4_env_learn_struct_outdoor_classroom":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Outdoor Classroom]'],
+                "section4_env_learn_struct_outdoor_environmental_art":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Outdoor environmental art]'],
+                "section4_env_learn_struct_greenhouse":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Greenhouse]'],
+                "section4_env_learn_struct_tower_garden":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Tower garden]'],
+                "section4_env_learn_struct_weather_station":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Weather Station]'],
+                "section4_env_learn_struct_pond":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Pond]'],
+                "section4_env_learn_struct_hydroponics":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Hydroponics ]'],
+                "section4_env_learn_struct_aquaponics":res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Aquaponics]'],
+                "section4_enviro_structure_comments":res[i]['Structures for Environmental Learning:  Other and Comments, please describe other structures for environmental learning located on your school campus. '],
+                "section5_no_idle_zone":res[i]['Does your school have a No Idle Zone?'],
+                "section5_formal_carpooling":res[i]['Does your school have a formal carpooling program? '],
+                "section5_electric_hybrid_parking":res[i]['Does your school have parking spaces designated for electric, hybrid, or energy efficient vehicles? '],
+                "section5_grow_donate_eat_garden":res[i]['Does your school grow and donate and/or eat healthy food in school gardens?'],
+                "section5_green_cleaning_products":res[i]['Does your school utilize green cleaning products?'],
+                "section5_community_science_program":res[i]['Does your school participate in one or more Citizen Science/Community Science programs such as GLOBE, GLOBE Observer, iTree, iNaturalist or other citizen science/ community science protocol to better understand the school environment and how citizen science/community science is used?'],
+                "section6_enviro_awards":res[i]['Has your school received any awards or special recognition based on your enviornmental actions or instruction? '],
+                "section6_actions_not_mentioned":res[i]['Are there any other environmentally friendly actions your school takes that have not been mentioned in this survey?']
+                
+              }
+    table.put_item(Item=input2)
 
 # for i in range(10):
-q= table.scan(
-        # KeyConditionExpression = Key('pkey').eq(i) & Key('section1_green_school_certification')
-    FilterExpression = Attr('section1_green_school_certification').eq('No')
-)
-
-res_len =   len(q['Items'])
-for i in range(res_len):
-    # print(q[i])
-    print(q['Items'][i]['pkey'],q['Items'][i]['section1_green_school_certification'])
-    # print(q['Items'][i]['pkey'])
-
-# "section1_composting_open_frame",
-        # "section1_composting_send_compost_local_facility_farm",
-        # "section1_composting_dont_know",
-        # "section1_cleanup_volunteer_effort",
-        # "section1_waste_reduction_comments",
-        # "section2_reducing_water_strategy",
-        # "section2_stream",
-        # "section2_water_prevention_stream_bank_planting",
-        # "section2_water_prevention_erosion_control_project",
-        # "section2_water_prevention_painted_storm_drains",
-        # "section2_water_prevention_raingarden_bioretention_area_planted",
-        # "section2_water_prevention_no_mow_zone",
-        # "section2_water_prevention_rain_barrels",
-        # "section2_water_prevention_stream_cleaning",
-        # "section2_water_prevention_collected_litter",
-        # "section2_water_prevention_turf_eduction",
-        # "section2_water_prevention_surface_reduction",
-        # "section2_water_prevention_green_roof",
-        # "section2_water_prevention_retrofitted_sink_toilet_showers",
-        # "section2_runoff_strategy",
-        # "section2_water_conservation_comments",
-        # "section3_reduce_energy_strategy",
-        # "section3_energy_conservation_installed_efficient_lighting",
-        # "section3_energy_conservation_use_daylighting",
-        # "section3_energy_conservation_delamped",
-        # "section3_energy_conservation_planted_tree_shading",
-        # "section3_energy_conservation_use_of_blinds",
-        # "section3_renewable_energy",
-        # "section3_renewable_source_solar",
-        # "section3_renewable_source_wind",
-        # "section3_renewable_source_geothermal",
-        # "section3_energy_conservation_comments",
-        # "section4_restore_habitat",
-        # "section4_habitat_restoration_created_bird_houses",
-        # "section4_habitat_restoration_planted_native_trees",
-        # "section4_habitat_restoration_planted_native_shrubs",
-        # "section4_habitat_restoration_removal_invasive_species",
-        # "section4_habitat_restoration_created_native_habitat",
-        # "section4_habit_restoration_comments",
-        # "section4_enviro_learning_structures",
-        # "section4_env_learn_struct_interpretive_signage",
-        # "section4_env_learn_struct_trails_pathways",
-        # "section4_env_learn_struct_boardwalk_bridges",
-        # "section4_env_learn_struct_tree_plant_id_tags",
-        # "section4_env_learn_struct_outdoor_classroom",
-        # "section4_env_learn_struct_outdoor_environmental_art",
-        # "section4_env_learn_struct_greenhouse",
-        # "section4_env_learn_struct_tower_garden",
-        # "section4_env_learn_struct_weather_station",
-        # "section4_env_learn_struct_pond",
-        # "section4_env_learn_struct_hydroponics",
-        # "section4_env_learn_struct_aquaponics",
-        # "section4_enviro_structure_comments",
-        # "section5_no_idle_zone",
-        # "section5_formal_carpooling",
-        # "section5_electric_hybrid_parking",
-        # "section5_grow_donate_eat_garden",
-        # "section5_green_cleaning_products",
-        # "section5_community_science_program",
-        # "section6_enviro_awards",
-        # "section6_actions_not_mentioned",
-        # "latitude",
-        # "longitude",
-        # "picture",
-        # "website"
-
-
-
-
-
-
-
-
-
-
-
-
-
-# res = table.get_item(
-#     Key={
-#         'schoolNames':'Parkdale High School'
-#     }
+# q= table.scan(
+#         # KeyConditionExpression = Key('pkey').eq(i) & Key('section1_green_school_certification')
+#     FilterExpression = Attr('section1_green_school_certification').eq('No')
 # )
-# print(res[0]['Completed Water Conservation/Water Pollution Prevention actions'])
-# index = 0
-# while index < len(res):
 
-#     valueList = list(res[index].values())
-#     print(valueList)
-#     table.put_item(
-#         Item={
-#             'schoolName' : valueList[2],
-#             'key' : valueList[0],
-#             'Email Address': valueList[1],
-#             'MD Green School Certification' : valueList[3],
-#             'Active Garden' : valueList[4],
-#             'Actively Recycle' : valueList[5],
-#             'School participation in the following Recycling Programs/Activities?' : valueList[6],
-#             'Type of composting implemented in school' : valueList[7],
-#             'School participation in environmental cleanup volunteer efforts' : valueList[8],
-#             'Waste Reduction:  Other and Comments, other waste reduction efforts' : valueList[9],
-#             'Are strategies implemented to reduce water use in your school' : valueList[10],
-#             'Do you have a stream located on your school grounds' : valueList[11],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Stream Bank Planting (Riparian Buffer)]' : valueList[12],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Erosion Control Project other than Stream Bank Planting]' : valueList[13],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Painted Storm Drains]' : valueList[14],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Raingarden/bioretention area planted]' : valueList[15],
-#             'Completed Water Conservation/Water Pollution Prevention actions [No-mow zone installed ]' : valueList[16],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Rain barrels installed]' : valueList[17],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Stream Cleaning (at your school or in the community)]' : valueList[18],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Collected litter to prevent water pollution]' : valueList[19],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Turf Eduction]' : valueList[20],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Impervious surface reduction]' : valueList[21],
-#             'Completed Water Conservation/Water Pollution Prevention actions [Green Roof]' : valueList[22],
-#             'Completed Water Conservation/Water Pollution Prevention actions? [Retrofitted sinks, toilets, showers]' : valueList[23],
-#             'Implement strategies to reduce or improve runoff from the school grounds?' : valueList[24],
-#             'Water Conservation: storm water management has been done or is taking place at your school on what has been/is being done' : valueList[25],
-#             'Does your school implement strategies to reduce energy use?': valueList[26],
-#             'Completed the following Energy Conservation actions? [Installed efficient lighting]' : valueList[27],
-#             'Completed the following Energy Conservation actions? Please provide an answer in each row.  [Use Daylighting most of the day]' : valueList[28],
-#             'Completed the following Energy Conservation actions? [Delamped]' : valueList[29],
-#             'Completed the following Energy Conservation actions? [Planted trees to shade building]' : valueList[30],
-#             'Completed the following Energy Conservation actions? [Use of blinds in the classroom to control daylight and temperature]' : valueList[31],
-#             'Does your school use renewable energy sources?' : valueList[32],
-#             'Please indicate the renewable energy sources that your school uses? [Solar]' : valueList[33],
-#             'Please indicate the renewable energy sources that your school uses? [Wind]' : valueList[34],
-#             'Please indicate the renewable energy sources that your school uses? [Geothermal' : valueList[35],
-#             'Energy Conservation: additional energy conservation practices or renewable energy sources are being implemented at your school' : valueList[36],
-#             'Did you restore habitat on your school grounds?' : valueList[37],
-#             'Habitat restoration actions that your school has implemented? [Created/Installed bird houses]' : valueList[38],
-#             'Habitat restoration actions that your school has implemented? [Planted Native Trees]' : valueList[39],
-#             'Habitat restoration actions that your school has implemented? [Planted Native Shrubs]' : valueList[40],
-#             'Habitat restoration actions that your school has implemented? [Removal of invasive species]' : valueList[41],
-#             'Habitat restoration actions that your school has implemented? [Created native habitat - meadows, wetlands or forests]' : valueList[42],
-#             'Habitat Restoration: other habitat restoration efforts at your school or that your school has done in the community.' : valueList[43],
-#             'Does your school have structures for environmental learning on the school grounds?' : valueList[44],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Interpretive signage]' : valueList[45],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Trails, pathways]' : valueList[46],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Boardwalk, bridges]' : valueList[47],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Tree/Plant ID Tags]' : valueList[48],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Outdoor Classroom]' : valueList[49],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Outdoor environmental art]' : valueList[50],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Greenhouse]' : valueList[51],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Tower garden]' : valueList[52],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Weather Station]' : valueList[53],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Pond]' : valueList[54],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Hydroponics ]' : valueList[55],
-#             'Please indicate the structures for environmental learning located on your school grounds. [Aquaponics]' : valueList[56],
-#             'Structures for Environmental Learning: other structures for environmental learning located on your school campus.' : valueList[57],
-#             'Does your school have a No Idle Zone?' : valueList[58],
-#             'Does your school have a formal carpooling program?' : valueList[59], 
-#             'Does your school have parking spaces designated for electric, hybrid, or energy efficient vehicles?' : valueList[60],
-#             'Does your school grow and donate and/or eat healthy food in school gardens?' : valueList[61],
-#             'Does your school utilize green cleaning products?' : valueList[62],
-#             'Participate in Citizen/Community Science programs to understand the school environment, how science is used' : valueList[63],
-#             'Has your school received any awards or special recognition based on your enviornmental actions or instruction?' : valueList[64],
-#             'Are there any other environmentally friendly actions your school takes that have not been mentioned in this survey?' : valueList[65],
-#             }
-#         )
-#     index += 1
+# res_len =   len(q['Items'])
+# for i in range(res_len):
+#     # print(q[i])
+#     print(q['Items'][i]['pkey'],q['Items'][i]['section1_green_school_certification'])
+#     # print(q['Items'][i]['pkey'])
 
 
 
 
-    
+# ,
+                # "latitude":res[i][''],
+                # "longitude":res[i][''],
+                # "picture":res[i][''],
+                # "website":res[i]['']
