@@ -6,6 +6,28 @@
     padding-top: 1rem;
 }
 
+.tablink{
+    padding: 1rem;
+}
+
+.tab-link:hover{
+    color: inherit;
+}
+
+.doc-section{
+    padding: 2rem;
+    padding-top: 0px;
+}
+
+.tabs-section{
+    padding-top: 0px;
+}
+
+.dark-grey,.dark-grey:hover{
+    color:#fff!important;
+    background-color:#48c78e!important
+}
+
 @media (min-width: 501px) {
   
     #HomeTitle{
@@ -58,7 +80,6 @@
 .navbar-item{
     color: white;
 }
-
 
 @media (max-width:500px) {
     /* #HomeTitle>h2{ */
