@@ -1,7 +1,9 @@
 import re
 import requests
 import json
-from bs4 import BeautifulSoup
+import boto3
+from bs4 import BeautifulSoup 
+
 
 GOOGLE_NUM_COLUMNS = 66
 # MYSQL_JSON_COLUMN_NAMES contains a list of column names. These column names
@@ -275,6 +277,9 @@ def getSchoolAdditionalInfo(schoolName, item):
 # character (\") so it does not interfere with the MYSQL
 # statement.
 def populateDatabase(rows):
+    client = boto3.resource('dynamodb')
+    table = client.Table('dbtest2')
+    pk_count = 1 
 
     for row in rows:
         if len(row[0]) > 0:  ## row[0] is the timestamp field. If it is empty, don't do anything. Go to next row
@@ -287,6 +292,8 @@ def populateDatabase(rows):
             compostingCounter = 0
             #creating item to put in dynamodb
             item = {}
+            item["pk_num"] = pk_count
+            pk_count = pk_count + 1 
 
             for column in MYSQL_JSON_COLUMN_NAMES:
                 #column[1] is the column name
@@ -310,10 +317,18 @@ def populateDatabase(rows):
 
             #pass in item to fill in remaining values
             getSchoolAdditionalInfo(row[2].strip(), item)  # row[2] is the school name
+            
+            res = table.put_item(Item=item)
+            print(res)
 
             #print("NEW-ROW#############################################################")
             #for k, v in item.items():
-            #   print(k + "->" + v)
+                #print(k + "->" + v)  
+
+
+   
+            
+          
 
 
 ################

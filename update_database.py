@@ -321,7 +321,8 @@ def populateDatabase(mycursor, rows):
             sql += getSchoolAdditionalInfo(row[2].strip())  # row[2] is the school name
             sql = sql[:-1]  ## Remove the last character (a comma)
             sql += ")"
-            mycursor.execute(sql)
+            print(sql)
+            #mycursor.execute(sql)
 
 
 ################
@@ -330,11 +331,11 @@ def populateDatabase(mycursor, rows):
 rowValues = getValuesFromGoogle()
 #getValuesFromPGCPublicSchool()
 
-mydb = pymysql.connect(host='pgcpsdb.cciww86edgy9.us-east-1.rds.amazonaws.com',
-                      user='root',
-                      password='38kvFH6K20stnYiq7l9z',
-                      charset='utf8mb4',
-                      cursorclass=pymysql.cursors.DictCursor)
+# mydb = pymysql.connect(host='pgcpsdb.cciww86edgy9.us-east-1.rds.amazonaws.com',
+#                       user='root',
+#                       password='38kvFH6K20stnYiq7l9z',
+#                       charset='utf8mb4',
+#                       cursorclass=pymysql.cursors.DictCursor)
 mycursor = mydb.cursor()
 createDatabaseTable(mycursor)
 
