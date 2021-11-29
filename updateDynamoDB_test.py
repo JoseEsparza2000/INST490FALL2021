@@ -125,7 +125,7 @@ def getValuesForComposting(googleValue, composting):
 def getSchoolAdditionalInfo(schoolName, add_info):
     for schoolInfo in KNOWN_SCHOOLS_INFO:
         if schoolInfo[0].find(schoolName) != -1:
-            swi
+
             if add_info == 'latitude':
                 return schoolInfo[1]
             elif add_info == 'longitude':

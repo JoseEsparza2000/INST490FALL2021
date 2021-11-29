@@ -319,7 +319,7 @@ def populateDatabase(rows):
             getSchoolAdditionalInfo(row[2].strip(), item)  # row[2] is the school name
             
             res = table.put_item(Item=item)
-            print(res)
+            # print(res)
 
             #print("NEW-ROW#############################################################")
             #for k, v in item.items():
