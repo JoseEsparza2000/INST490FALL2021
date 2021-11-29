@@ -17,6 +17,7 @@ for index in range(len(res)):
 
     valueList = list(res[index].values())
 
+
     activeGardens = ["Vegetable garden", "Native garden", "Butterfly garden", "Rain garden", 
     "Zen garden", "Herb garden"]
     noGardens = ["No gardens on campus", "I don't know."]

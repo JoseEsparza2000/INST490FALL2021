@@ -3,6 +3,10 @@ body, html {
   font-family: "Inconsolata", sans-serif;
 }
 
+.navbar-menu {
+	background-color: #48c78e;
+}
+
 .bgimg {
   background-position: center;
   background-size: cover;
@@ -207,7 +211,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 /* Colors */
 .sand,.hover-sand:hover{color:#000!important;background-color:#fdf5e6!important}
 .black,.hover-black:hover{color:#fff!important;background-color:#000!important}
-.dark-grey,.hover-dark-grey:hover,.dark-gray,.hover-dark-gray:hover{color:#fff!important;background-color:#616161!important}
+.dark-grey,.hover-dark-grey:hover,.dark-gray,.hover-dark-gray:hover{color:#fff!important;background-color:#48c78e!important}
 .text-sand,.hover-text-sand:hover{color:#fdf5e6!important}
 .text-black,.hover-text-black:hover{color:#000!important}
 .text-dark-grey,.hover-text-dark-grey:hover,.text-dark-gray,.hover-text-dark-gray:hover{color:#3a3a3a!important}
@@ -773,17 +777,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 
 
-/* div icon */
+/* div icon
 
 .leaflet-div-icon {
 	background: #fff;
 	border: 1px solid #666;
-	}
+	} */
 
 
 /* Tooltip */
 /* Base styles for the element that has a tooltip */
-.leaflet-tooltip {
+/* .leaflet-tooltip {
 	position: absolute;
 	padding: 6px;
 	background-color: #fff;
@@ -811,11 +815,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	border: 6px solid transparent;
 	background: transparent;
 	content: "";
-	}
+	} */
 
 /* Directions */
 
-.leaflet-tooltip-bottom {
+/* .leaflet-tooltip-bottom {
 	margin-top: 6px;
 }
 .leaflet-tooltip-top {
@@ -857,4 +861,4 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	left: 0;
 	margin-left: -12px;
 	border-right-color: #fff;
-	}
+	} */
