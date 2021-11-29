@@ -2,20 +2,19 @@ import gspread
 import boto3
 from boto3.dynamodb.conditions import Key
 from boto3.dynamodb.conditions import Attr
-import pprint
-# import time
 import json
 
 gc = gspread.service_account(filename='keys.json')
-
 spread = gc.open_by_key('1w1X00YL2uV_inK-l4VVbGXOXQpW1XoXlqkHFwDcJ-kc')
-
 worksheet = spread.sheet1
-
 res = worksheet.get_all_records()
-num_of_cols = worksheet.col_count
-with open ('column_names.json', 'r') as f:
-    col_names = json.load(f)
+
+client = boto3.resource('dynamodb')
+table = client.Table('testdb')
+
+# num_of_cols = worksheet.col_count
+# with open ('column_names.json', 'r') as f:
+#     col_names = json.load(f)
 
         
 ACTIVE_GARDENS = [
@@ -104,23 +103,23 @@ KNOWN_SCHOOLS_INFO = [
 
 def getValuesForActiveGargen(googleValue, gardenType):
     if googleValue.find(gardenType) != -1:
-        return "Yes"    
-    return "No"
+        return 'Yes'    
+    return 'No'
 
 def getValuesForRecycle(googleValue, recycle):
     if googleValue.find(recycle) != -1:
-        return '"Yes",'    
-    return '"No",'
+        return 'Yes'    
+    return 'No'
 
 def getValuesForRecyclingProgram(googleValue, recyclingProgram):
     if googleValue.find(recyclingProgram) != -1:
-        return '"Yes",'    
-    return '"No",'
+        return 'Yes'    
+    return 'No'
 
 def getValuesForComposting(googleValue, composting):
     if googleValue.find(composting) != -1:
-        return '"Yes",'    
-    return '"No",'
+        return 'Yes'    
+    return 'No'
 
 def getSchoolAdditionalInfo(schoolName, add_info):
     for schoolInfo in KNOWN_SCHOOLS_INFO:
@@ -230,13 +229,11 @@ db_columnNames = [
 ]
 
 
-client = boto3.resource('dynamodb')
-table = client.Table('testdb')
 
 # for i in range(1):
 for i in range(len(res)):
     input2 = {  "pkey":i+1,
-                "section_1_school_name":res[i]['What is the name of your school? '],
+                "schoolName":res[i]['What is the name of your school? '],
                 db_columnNames[1]: res[i]['Timestamp'],
                 db_columnNames[2]:res[i]['Email Address'],
                 db_columnNames[3]:res[i]['Does your school have a MD Green School Certification?'],
@@ -347,6 +344,4 @@ for i in range(len(res)):
 
 
 
-
-# ,
                 
