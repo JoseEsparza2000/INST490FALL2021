@@ -124,7 +124,6 @@ for index in range(len(res)):
             'section6_actions_not_mentioned' : valueList[65],
         }
     )
-    # index += 1
 
 
 
