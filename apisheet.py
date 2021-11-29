@@ -10,10 +10,10 @@ worksheet = spread.sheet1
 res = worksheet.get_all_records()
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('pgcpsDB')
+table = dynamodb.Table('testdb')
 
-index = 0
-while index < len(res):
+# index = 0
+for index in range(len(res)):
 
     valueList = list(res[index].values())
 
@@ -33,9 +33,10 @@ while index < len(res):
 
     table.put_item(
         Item={
+            "pkey":index+1,
+            'schoolName' : valueList[2],
             'Timestamp' : valueList[0],
             'Email Address': valueList[1],
-            'schoolNames' : valueList[2],
             'section1_green_school_certification' : valueList[3],
             'section1_active_garden_vegetable_garden' : 'Yes' if valueList[4] in activeGardens else 'No',
             'section1_active_garden_native_garden' : 'Yes' if valueList[4] in activeGardens else 'No',
@@ -123,7 +124,7 @@ while index < len(res):
             'section6_actions_not_mentioned' : valueList[65],
         }
     )
-    index += 1
+    # index += 1
 
 
 
