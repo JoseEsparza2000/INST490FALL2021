@@ -11,4 +11,3 @@ query = table.scan(
 )
 
 print(type(float(query['Items'][0]['latitude'])))
-
