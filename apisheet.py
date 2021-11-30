@@ -11,7 +11,7 @@ res = worksheet.get_all_records()
 
 dynamodb = boto3.resource('dynamodb')
 
-table = dynamodb.Table('pgcpsDB')
+table = dynamodb.Table('testdb')
 
 KNOWN_SCHOOLS_INFO = [
     ["International High School at Largo", '38.8859', '-76.8234',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Largo%20HS.jpg?n=7335", "https://www.pgcps.org/ihslargo"],
