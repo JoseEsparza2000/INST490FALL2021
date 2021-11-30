@@ -22,6 +22,7 @@ mydb = pymysql.connect(host='pgcpsdb.cciww86edgy9.us-east-1.rds.amazonaws.com',
                       db='pgcps_environmental_lit',
                       charset='utf8mb4',
                       cursorclass=pymysql.cursors.DictCursor)
+
 mycursor = mydb.cursor()
 jsonValue = convertDataToJson(mycursor)
 print(jsonValue)
