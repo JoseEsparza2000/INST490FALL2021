@@ -11,12 +11,7 @@ res = worksheet.get_all_records()
 
 client = boto3.resource('dynamodb')
 table = client.Table('testdb')
-
-# num_of_cols = worksheet.col_count
-# with open ('column_names.json', 'r') as f:
-#     col_names = json.load(f)
-
-        
+    
 ACTIVE_GARDENS = [
     "Vegetable garden", "Native garden", "Butterfly garden", "Rain garden", 
     "Zen garden", "Herb garden", "No gardens on campus", "I don't know"
@@ -44,6 +39,7 @@ KNOWN_SCHOOLS_INFO = [
     ["Benjamin Tasker MS", '38.9580', '-76.7477',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Middle/Benjamin%20Tasker%20MS.jpg", "https://www.pgcps.org/benjamintasker/"],
     ["Berwyn Heights ES", '38.9921', '-76.9114',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/berwyn.jpg?n=1766", "https://www.pgcps.org/berwynheights/"],
     ["Bladensburg HS", '38.942617', '-76.9206946',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Bladensburg%20High.jpg", "https://www.pgcps.org/bladensburghs/"],
+    ["Bond Mill", '39.1094', '-76.8974',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/bondmill.jpg", "https://www.pgcps.org/bondmill"],
     ["Bond Mill Elementary", '39.1094', '-76.8974',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/bondmill.jpg", "https://www.pgcps.org/bondmill"],
     ["Buck Lodge Middle School", '39.0108', '-76.9617',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Middle/Buck%20Lodge.jpg", "https://www.pgcps.org/bucklodge/"],
     ["CENTRAL HS@Forestvill", '38.836129', '-76.8875897',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Central%20HS.jpg", "https://www.pgcps.org/central/"],
@@ -76,6 +72,7 @@ KNOWN_SCHOOLS_INFO = [
     ["Kingsford Elementary School", '38.9086', '-76.7990',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Kingsford%20ES.jpg", "https://www.pgcps.org/kingsford"],
     ["Langley Park - McCormick ES", '38.9940', '-76.9831',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Langley%20Park.jpg", "https://www.pgcps.org/langleyparkmccormick/"],
     ["Laurel High School", '39.0942', '-76.8702',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Laurel%20HS.jpg", "https://www.pgcps.org/largo/"],
+    ["Laurel High", '39.0942', '-76.8702',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Laurel%20HS.jpg", "https://www.pgcps.org/largo/"],
     ["Magnolia ES", '38.9838055', '-76.8642313',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Magnolia%20ES.jpg", "https://www.pgcps.org/magnolia/"],
     ["Marlton Elementary School", '38.7725', '-76.7913',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Marlton%20ES.jpg", "https://www.pgcps.org/marlton/"],
     ["Melwood Elementary School", '38.7907', '-76.8404',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Melwood%20new%20front%20entrance%20pic.jpg", "https://www.pgcps.org/melwood/"],
@@ -100,39 +97,6 @@ KNOWN_SCHOOLS_INFO = [
     ["Whitehall Elementary School", '38.9895601', '-76.7534197',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Whitehall%20ES.jpg", "https://www.pgcps.org/whitehall/"],
     ["Woodridge", '38.9507', '-76.8937',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/collage%20(1).png", "https://www.pgcps.org/woodridge/"]
 ]
-
-def getValuesForActiveGargen(googleValue, gardenType):
-    if googleValue.find(gardenType) != -1:
-        return 'Yes'    
-    return 'No'
-
-def getValuesForRecycle(googleValue, recycle):
-    if googleValue.find(recycle) != -1:
-        return 'Yes'    
-    return 'No'
-
-def getValuesForRecyclingProgram(googleValue, recyclingProgram):
-    if googleValue.find(recyclingProgram) != -1:
-        return 'Yes'    
-    return 'No'
-
-def getValuesForComposting(googleValue, composting):
-    if googleValue.find(composting) != -1:
-        return 'Yes'    
-    return 'No'
-
-def getSchoolAdditionalInfo(schoolName, add_info):
-    for schoolInfo in KNOWN_SCHOOLS_INFO:
-        if schoolInfo[0].find(schoolName) != -1:
-
-            if add_info == 'latitude':
-                return schoolInfo[1]
-            elif add_info == 'longitude':
-                return schoolInfo[2]
-            # return str(schoolInfo[1]) + "," + str(schoolInfo[2]) + ",\"" + str(schoolInfo[3]) + "\",\"" + str(schoolInfo[4]) + "\"," 
-
-#     return "38.7849,-76.8721,'Data Not Available','Data Not Available',"  
-## Default value if we don't find the school
 db_columnNames = [
     "section1_school_name",
     "section1_time_stamp",
@@ -229,10 +193,49 @@ db_columnNames = [
 ]
 
 
+def getValuesForActiveGargen(googleValue, gardenType):
+    if googleValue.find(gardenType) != -1:
+        return 'Yes'    
+    return 'No'
 
-# for i in range(1):
+def getValuesForRecycle(googleValue, recycle):
+    if googleValue.find(recycle) != -1:
+        return 'Yes'    
+    return 'No'
+
+def getValuesForRecyclingProgram(googleValue, recyclingProgram):
+    if googleValue.find(recyclingProgram) != -1:
+        return 'Yes'    
+    return 'No'
+
+def getValuesForComposting(googleValue, composting):
+    if googleValue.find(composting) != -1:
+        return 'Yes'    
+    return 'No'
+
+def getSchoolAdditionalInfo(schoolName, add_info):
+    for schoolInfo in KNOWN_SCHOOLS_INFO:
+        if schoolInfo[0] == schoolName:
+
+            if add_info == 'latitude':
+
+                return schoolInfo[1]
+
+            elif add_info == 'longitude':
+                return schoolInfo[2]
+            
+            elif add_info == 'picture':
+                return schoolInfo[3]
+            
+            elif add_info == 'website':
+                return schoolInfo[4]
+            
+            
+ 
+## Default value if we don't find the school
+
 for i in range(len(res)):
-    input2 = {  "pkey":i+1,
+    input = {  "pkey":i+1,
                 "schoolName":res[i]['What is the name of your school? '],
                 db_columnNames[1]: res[i]['Timestamp'],
                 db_columnNames[2]:res[i]['Email Address'],
@@ -322,9 +325,11 @@ for i in range(len(res)):
                 db_columnNames[86]:res[i]['Has your school received any awards or special recognition based on your enviornmental actions or instruction? '],
                 db_columnNames[87]:res[i]['Are there any other environmentally friendly actions your school takes that have not been mentioned in this survey?'],
                 db_columnNames[88]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'latitude'),
-                db_columnNames[89]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'longitude')
+                db_columnNames[89]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'longitude'),
+                db_columnNames[90]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'picture'),
+                db_columnNames[91]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'website')
               }
-    table.put_item(Item=input2)
+    table.put_item(Item=input)
                 # "longitude":res[i][''],
                 # "picture":res[i][''],
                 # "website":res[i]['']

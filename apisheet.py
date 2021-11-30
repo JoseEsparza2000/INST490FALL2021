@@ -81,25 +81,26 @@ KNOWN_SCHOOLS_INFO = [
     ["Charles Herbert Flowers High School", '38.9315768', '-76.8373013',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Charles%20H.%20Flowers.jpg", "https://www.pgcps.org/charleshflowers/"],
     ["Cool Spring ES", '39.0021151','-76.9759007',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Elementary_Schools/Cool_Spring/b56a4bc68bac4e11941c2644f0c71d61.jpg", "https://www.pgcps.org/coolspring/"]
 ]
+activeGardens = ["Vegetable garden", "Native garden", "Butterfly garden", "Rain garden", 
+"Zen garden", "Herb garden"]
+noGardens = ["No gardens on campus", "I don't know."]
 
-position = 0
+recycle = ['At breakfast', 'At lunch', 'In the classroom']
+noRecycle = ['Not at all', "I don't know."]
+
+recyclingPrograms = ["Ink Cartridge Recycling", "Cell Phones, Batteries and Other Electronics", 
+"Terra Cycling", "Color Cycle (Crayola)", "Pepsi Recycle Rally"]
+noPrograms = ["None of these Programs/Activities", "I don't know."]
+
+composting = ["Vermiculture", "Drum compost", "Open frame", "Send Compost to Local Composting Facility/Farm"]
+noComposting = ["We did not compost at our school", "I don't know."]
+
+# position = 0
 for index in range(len(res)):
 
     valueList = list(res[index].values())
 
-    activeGardens = ["Vegetable garden", "Native garden", "Butterfly garden", "Rain garden", 
-    "Zen garden", "Herb garden"]
-    noGardens = ["No gardens on campus", "I don't know."]
 
-    recycle = ['At breakfast', 'At lunch', 'In the classroom']
-    noRecycle = ['Not at all', "I don't know."]
-
-    recyclingPrograms = ["Ink Cartridge Recycling", "Cell Phones, Batteries and Other Electronics", 
-    "Terra Cycling", "Color Cycle (Crayola)", "Pepsi Recycle Rally"]
-    noPrograms = ["None of these Programs/Activities", "I don't know."]
-
-    composting = ["Vermiculture", "Drum compost", "Open frame", "Send Compost to Local Composting Facility/Farm"]
-    noComposting = ["We did not compost at our school", "I don't know."]
     
     table.put_item(
         Item={
@@ -192,13 +193,12 @@ for index in range(len(res)):
             'section5_community_science_program' : valueList[63],
             'section6_enviro_awards' : valueList[64],
             'section6_actions_not_mentioned' : valueList[65],
-            'latitude' : KNOWN_SCHOOLS_INFO[position][1],
-            'longitude' : KNOWN_SCHOOLS_INFO[position][2],
-            'picture' : KNOWN_SCHOOLS_INFO[position][3],
-            'website' : KNOWN_SCHOOLS_INFO[position][4]
+            'latitude' : KNOWN_SCHOOLS_INFO[index][1],
+            'longitude' : KNOWN_SCHOOLS_INFO[index][2],
+            'picture' : KNOWN_SCHOOLS_INFO[index][3],
+            'website' : KNOWN_SCHOOLS_INFO[index][4]
         }
     )
-    position += 1
 
     
 
