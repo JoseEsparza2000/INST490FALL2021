@@ -8,8 +8,8 @@ table = dynamodb.Table('testdb')
 
 
 query = table.scan(
-    FilterExpression = Attr('schoolName').eq('Gwynn Park High School')
+    FilterExpression = Attr('pkey').gte(1)
 )
 
 # print(type(float(query['Items'][0]['latitude'])))
-pprint.pprint(query['Items'])
+# pprint.pprint(query['Items'])

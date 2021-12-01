@@ -1,4 +1,6 @@
-// document.addEventListener('DOMContentLoaded', ()=>{
+// import {readAPI, dropDown_query} from "/api_endpoint.js"
+
+
 async function schoolNamesDropDown(readAPI){
     const request = await fetch(readAPI)
     const response = await request.json()
