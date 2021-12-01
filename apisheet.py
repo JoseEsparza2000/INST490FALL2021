@@ -54,11 +54,11 @@ KNOWN_SCHOOLS_INFO = [
     ["Gladys Noon Spellman Elementary", '38.9308', '-76.9095',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Gladys%20Noon%20Spellman.jpg", "https://www.pgcps.org/gladysnoonspellman/"],
     ["Hollywood Elementary", '39.0151', '-76.9250',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Hollywood%20ES.jpg", "https://www.pgcps.org/hollywood/"],
     ["Stephen Decatur Middle School", '38.7766004', '-76.9106298',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Middle/Stephen%20Decatur%20MS.jpg", "https://www.pgcps.org/stephendecatur/"],
-    ["Laurel High School2", '39.0942', '-76.8702',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Laurel%20HS.jpg", "https://www.pgcps.org/largo/"],
+    ["Laurel High School2", 'No Data', 'No Data',"No Data", "No Data"],
     ["Glassmanor Elementary", '38.8171', '-76.9924',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Glassmanor%20ES.jpg", "https://www.pgcps.org/glassmanor/"],
     ["CMIT South Public Charter School", '38.8050457','-76.8409654',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Charter/cmit_ms.png?n=3662", "http://www.cmitsouthelementary.org"],
     ["Thomas Johnson Middle School",  '38.960509', '-76.843261',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Middle/Thomas%20Johnson%20MS.jpg", "https://www.pgcps.org/thomasjohnson/"],
-    ["Bond Mill",  '38.960509', '-76.843261',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Middle/Thomas%20Johnson%20MS.jpg", "https://www.pgcps.org/thomasjohnson/"],
+    ["Bond Mill",  'No Data', 'No Data',"No Data", "No Data"],
     ["Annapolis Road Academy", '38.9192886', '-76.7611796',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/High_Schools/Annapolis_Road/Pictures/IMG_0134.jpg", "https://www.pgcps.org/annapolisroad/"],
     ["Rogers Heights Elementary School", '38.9451163', '-76.9148903',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Rogers%20Heights%20ES.jpg", "https://www.pgcps.org/rogersheights/"],
     ["Whitehall Elementary School", '38.9895601', '-76.7534197',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Whitehall%20ES.jpg", "https://www.pgcps.org/whitehall/"],
@@ -71,7 +71,7 @@ KNOWN_SCHOOLS_INFO = [
     ["Magnolia ES", '38.9838055', '-76.8642313',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Elementary/Magnolia%20ES.jpg", "https://www.pgcps.org/magnolia/"],
     ["Parkdale High School", '38.9696933', '-76.9068296',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/parkdale.jpg", "https://www.pgcps.org/parkdale/"],
     ["Gwynn Park High School2", '38.7016', '-76.8697',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Gwynn%20Park%20HS.jpg", "https://www.pgcps.org/gwynnparkhs/"],
-    ["Laurel High School3", '39.0942', '-76.8702',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Laurel%20HS.jpg", "https://www.pgcps.org/largo/"],
+    ["Laurel High School3", 'No Data', 'No Data',"No Data", "No Data"],
     ["Frederick Douglass High School", '38.7815367', '-76.7838189',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/douglass.jpg", "https://www.pgcps.org/douglass/"],
     ["Northwestern HS", '38.9752874', '-76.9562757',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/High/Northwestern%20HS(1).jpg", "https://www.pgcps.org/northwestern"],
     ["Dora Kennedy French Immersion", '38.9975238', '-76.9046507',"https://schools.pgcps.org/uploadedImages/Schools_and_Centers/Splash_Pages/Academies/dkfi-sign_1_orig.jpg", "https://www.pgcps.org/dorakennedy/"],
@@ -86,6 +86,7 @@ position = 0
 for index in range(len(res)):
 
     valueList = list(res[index].values())
+    print(valueList[4])
 
     activeGardens = ["Vegetable garden", "Native garden", "Butterfly garden", "Rain garden", 
     "Zen garden", "Herb garden"]
@@ -100,7 +101,7 @@ for index in range(len(res)):
 
     composting = ["Vermiculture", "Drum compost", "Open frame", "Send Compost to Local Composting Facility/Farm"]
     noComposting = ["We did not compost at our school", "I don't know."]
-    
+    """
     table.put_item(
         Item={
             "pkey":index+1,
@@ -197,7 +198,7 @@ for index in range(len(res)):
             'picture' : KNOWN_SCHOOLS_INFO[position][3],
             'website' : KNOWN_SCHOOLS_INFO[position][4]
         }
-    )
+    )"""
     position += 1
 
     
