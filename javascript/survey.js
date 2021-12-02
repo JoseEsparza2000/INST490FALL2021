@@ -1,4 +1,4 @@
-// import {readAPI, dropDown_query} from "/api_endpoint.js"
+import {readAPI} from "../apiRoutes/api_endpoint.js"
 
 
 async function schoolNamesDropDown(readAPI){
@@ -33,7 +33,7 @@ async function populateSurvey(event,results){
     response = response[0]
     // res_arr = Object.entries(response)
     // console.log(Object.entries(response))
-    db_columnNames = [
+    const db_columnNames = [
             "schoolName",
             "section1_time_stamp",
             "section1_email",
@@ -129,7 +129,7 @@ async function populateSurvey(event,results){
     ]
 
     const html = `
-    <div class="box">
+    <div class="box has-text-centered">
                                      
         <p>Section 1: School Name - ${response[db_columnNames[0]]}</p><br>
         <p>Section 1: Time Stamp - ${response[db_columnNames[1]]}</p><br>
@@ -228,18 +228,12 @@ async function populateSurvey(event,results){
 
     
     results.innerHTML=html
-    // res_arr.forEach((item)=>{
-    //     let p = document.createElement('p')
-    //     console.log(item)
-    //     p.innerHTML=(item[0]+'  '+item[1])
-    //     results.appendChild(p)
-    // })
+
 
 }
 
 async function mainThread(){
     
-    const readAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_dynamodb'
     let schoolNames = await schoolNamesDropDown(readAPI)
     let dropDown = document.querySelector('.survey-dropDown')
     let results = document.querySelector('.results')

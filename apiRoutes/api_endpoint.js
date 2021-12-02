@@ -1,12 +1,7 @@
-// export const readAPI = ()=>{
-//     return 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_dynamodb'
-// } 
-// export const dropDown_query = ()=>{
-//     return 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getDataByColumnName?columnName='
-// }
-// export {readAPI, dropDown_query}
+export const readAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_dynamodb'
+export const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getDataByColumnName?columnName='
 
-const JSON_KEY_TO_OPTION_NAMES = new Map([
+export const JSON_KEY_TO_OPTION_NAMES = new Map([
     ["section1_time_stamp", ["Section 1: Time Stamp", ""]],
     ["section1_email", ["Section 1: Email", ""]],
     ["section1_school_name", ["Section 1: School Name", ""]],
@@ -101,4 +96,4 @@ const JSON_KEY_TO_OPTION_NAMES = new Map([
     ["website", ["Website", "School Website"]]
 ]);
 
-export default JSON_KEY_TO_OPTION_NAMES
+// export default JSON_KEY_TO_OPTION_NAMES
