@@ -2,11 +2,11 @@
   "name": "pgcps_enviro_literacy490",
   "version": "1.0.0",
   "description": "<p>Title of Project: Prince George County Public School - Literacy 490</p>\r <p>Description of Project: Helps visually represent how environment-friendly schools are throughout PGC</p>\r <p>Link to App: http://localhost/</p>\r <p>Target Browsers: Google Chrome, Mozilla Firefox, Safari, Microsoft Edge</p>\r <p>Link to User Manual: https://github.com/asandin218/pgcps_enviro_literacy490/README.md </p><br/>\r <p>Link to Developer Manual: See below. </p><br/>",
-  "main": "index.js",
+  "main": "previous-backEnd/project_server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon project_server.js"
+    "start": "nodemon previous-backEnd/project_server.js"
   },
   "dependencies": {
     "command": "^0.0.1",

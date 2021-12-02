@@ -1,5 +1,15 @@
+/**
+ * This is the Javascript file needed to make the index.html file work
+ */
+
 function loadMap() {
-    mymap = L.map('mapid').setView([38.8162729,-76.7523043], 10);   
+    /**
+     * This function loads the leaflet map
+     * Takes no parameters
+     */
+
+
+    const mymap = L.map('mapid').setView([38.8162729,-76.7523043], 10);   
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
@@ -10,6 +20,13 @@ function loadMap() {
 }
 
 function populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect) {
+    /**
+     * This function populates the dropdown menu in index.html
+     * Takes two parameter:
+     *      JSON_KEY_TO_OPTION_NAMES (obj): a Map object created in the mainThread function
+     *      myselsect (obj): an object of the select element ,with a class name of feature_filters_drop_down, in the index.html file
+     */
+
     console.log("Populating Environmental Features drop-down list.");
     
     // Add the options to the drop-down and build the documentation page
@@ -37,9 +54,9 @@ async function displayMarkersByFeature(myselect) {
    
     // NOTE: The first thing we do here is clear the markers from the layer.
     markersLayer.clearLayers();
-    
+    const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getDataByColumnName?columnName='
     const request = await fetch(dropDown_query + feature + "&value=Yes")   
-    let response = JSON.parse(await request.json())
+    let response = await request.json()
 }
 
 function mainThread(){
@@ -139,6 +156,7 @@ function mainThread(){
         ["website", ["Website", "School Website"]]
     ]);
     const myselect = document.querySelector(".feature_filters_drop_down");
+    console.log(typeof(myselect))
     populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect)
     displayMarkersByFeature(myselect)
 }
