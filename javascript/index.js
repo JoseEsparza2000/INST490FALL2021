@@ -32,14 +32,37 @@ function populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect) {
 }
 
 async function displayMarkersByFeature(myselect) {
-    let feature = myselect.options[myselect.selectedIndex].value; 
+    let feature = myselect.options[myselect.selectedIndex].value;
+    const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getDataByColumnName?columnName='
     console.log("Displaying markers for: " + feature);
    
     // NOTE: The first thing we do here is clear the markers from the layer.
     markersLayer.clearLayers();
-    
-    const request = await fetch(dropDown_query + feature + "&value=Yes")   
-    let response = JSON.parse(await request.json())
+
+    const request = await fetch(dropDown_query + feature + "&value=Yes");
+    let response = await request.json()
+
+    response.forEach((item) => {
+        const latitude = item.latitude;
+            const longitude = item.longitude;    		  
+                
+            if(feature.toLowerCase().length > 0) {
+                    if(item[feature].toLowerCase() == "yes") {
+                        // Create a marker
+                        const marker = L.marker([latitude, longitude]);
+                        // Add a popup to the marker
+                        marker.bindPopup(
+                        "<b>" + item['schoolName'] + "</b><br>" +
+                        "Website: <a target='_blank' href='" + item.website + "'>" + item.website + "</a><br>" +
+                        "<img src='" + item.picture + "' style='width: 200px; height: 150px' /><br>"
+                        ).openPopup();
+                        // Add marker to the layer. Not displayed yet.
+                        markersLayer.addLayer(marker);
+                    }
+            }
+            // Display all the markers.
+            markersLayer.addTo(mymap);
+        }); 
 }
 
 function mainThread(){
@@ -140,7 +163,9 @@ function mainThread(){
     ]);
     const myselect = document.querySelector(".feature_filters_drop_down");
     populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect)
-    displayMarkersByFeature(myselect)
+    myselect.addEventListener('change', (event) => {
+        displayMarkersByFeature(myselect)
+    });
 }
 
 window.onload = mainThread
