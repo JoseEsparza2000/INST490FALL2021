@@ -16,7 +16,9 @@ function loadMap() {
         id: 'mapbox/streets-v11',
         accessToken: 'pk.eyJ1IjoiYXNhbmRpbjIxOCIsImEiOiJjazNwZm5kZDEwMm5qM3BwZTVwcmJvNGtpIn0.Omg_ZXfDgjgWA2-Lukxfow'
     }).addTo(mymap);
-    markersLayer = new L.LayerGroup();
+    
+    
+    return mymap
 }
 
 function populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect) {
@@ -48,7 +50,7 @@ function populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect) {
     }
 }
 
-async function displayMarkersByFeature(myselect) {
+async function displayMarkersByFeature(myselect, mymap, markersLayer) {
     let feature = myselect.options[myselect.selectedIndex].value;
     const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getDataByColumnName?columnName='
     console.log("Displaying markers for: " + feature);
@@ -83,7 +85,8 @@ async function displayMarkersByFeature(myselect) {
 }
 
 function mainThread(){
-    loadMap()
+    const mymap = loadMap()
+    markersLayer = new L.LayerGroup();
     const JSON_KEY_TO_OPTION_NAMES = new Map([
         ["section1_time_stamp", ["Section 1: Time Stamp", ""]],
         ["section1_email", ["Section 1: Email", ""]],
@@ -182,7 +185,7 @@ function mainThread(){
     console.log(typeof(myselect))
     populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect)
     myselect.addEventListener('change', (event) => {
-        displayMarkersByFeature(myselect)
+        displayMarkersByFeature(myselect, mymap, markersLayer)
     });
 }
 
