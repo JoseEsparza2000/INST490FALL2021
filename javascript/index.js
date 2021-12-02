@@ -84,6 +84,75 @@ async function displayMarkersByFeature(myselect, mymap, markersLayer) {
         }); 
 }
 
+async function displayMarkersBySectionRating(sectionDropdown,markersLayer,mymap) {
+    const section = sectionDropdown.options[sectionDropdown.selectedIndex].value;
+    const readAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_dynamodb';
+    console.log("Displaying markers for school rating section: " + section);
+
+    // NOTE: The first thing we do here is clear the markers from the layer.
+    markersLayer.clearLayers();
+    const request = await fetch(readAPI)
+    let response = await request.json()
+ 
+    response.forEach((item) =>{
+       let numberYes = countYesForSection(item, section);
+       console.log(item['schoolName'], numberYes)        	 
+              let latitude = item.latitude;
+              let longitude = item.longitude;
+ 
+              let circle = L.circle([latitude, longitude], {
+                  color: 'red',
+                  fillColor: '#f03',
+                  fillOpacity: 0.5,
+                  radius: numberYes * (section === 'srf_all' ? 50 : 100)
+              });
+               
+              // Add a popup to the circle
+              circle.bindPopup(
+                      "<b>" + item['schoolName'] + "</b><br>" +
+                      "Total Yes: " + numberYes + "<br>" +
+                      "Website: <a target='_blank' href='" + item.website + "'>" + item.website + "</a><br>" +
+                      "<img src='" + item.picture + "' style='width: 200px; height: 150px' /><br>"		                
+              ).openPopup();
+               
+              // Add marker to the layer. Not displayed yet.
+              markersLayer.addLayer(circle);             
+          
+          // Display all the markers.
+          markersLayer.addTo(mymap);
+          // return res;
+    })
+}
+
+function countYesForSection(schoolData, section) {
+	var counter = 0;
+	Object.entries(schoolData).forEach(([key, value]) => {
+		if(typeof value === 'string' && value.toLowerCase() === "yes") {
+			switch(section) {
+			case "srf_all":
+				counter++;
+				break;
+			case "srf_section1":
+				if(key.startsWith("section1_")) counter++;
+				break;
+			case "srf_section2":
+				if(key.startsWith("section2_")) counter++;
+				break;
+			case "srf_section3":
+				if(key.startsWith("section3_")) counter++;
+				break;
+			case "srf_section4":
+				if(key.startsWith("section4_")) counter++;
+				break;
+			case "srf_section5":
+				if(key.startsWith("section5_")) counter++;
+				break;
+			}
+		}
+	});	
+	return counter;
+}
+
 function mainThread(){
     const mymap = loadMap()
     markersLayer = new L.LayerGroup();
@@ -182,11 +251,15 @@ function mainThread(){
         ["website", ["Website", "School Website"]]
     ]);
     const myselect = document.querySelector(".feature_filters_drop_down");
+    const sectionSelect = document.querySelector(".section_filters_drop_down")
     console.log(typeof(myselect))
     populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect)
     myselect.addEventListener('change', (event) => {
         displayMarkersByFeature(myselect, mymap, markersLayer)
     });
+    sectionSelect.addEventListener('change', (event) => {
+        displayMarkersBySectionRating(sectionSelect,markersLayer,mymap)
+    })
 }
 
 window.onload = mainThread
