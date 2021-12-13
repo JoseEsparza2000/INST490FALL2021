@@ -14,8 +14,7 @@
     "jsdoc": "^3.6.7",
     "livereload": "^0.9.3",
     "node-fetch": "^2.6.0",
-    "nodemon": "^2.0.14",
-    "requests": "^0.3.0"
+    "nodemon": "^2.0.14"
   },
   "repository": {
     "type": "git",
