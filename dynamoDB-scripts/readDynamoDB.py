@@ -4,12 +4,9 @@ from boto3.dynamodb.conditions import Attr
 import pprint
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('testdb')
+table = dynamodb.Table('pgcpsdb')
 
 
 query = table.scan(
     FilterExpression = Attr('pkey').gte(1)
 )
-
-# print(type(float(query['Items'][0]['latitude'])))
-# pprint.pprint(query['Items'])

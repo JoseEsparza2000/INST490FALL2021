@@ -3,6 +3,7 @@
  */
 
 import {dropDown_query, JSON_KEY_TO_OPTION_NAMES} from '../apiRoutes/api_endpoint.js'
+
 /**
  * This function loads the leaflet map
  * @returns Returns the mymap object
@@ -61,13 +62,13 @@ async function displayMarkersByFeature(myselect, mymap, markersLayer) {
     let feature = myselect.options[myselect.selectedIndex].value;
     // const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getDataByColumnName?columnName='
     console.log("Displaying markers for: " + feature);
-   
+    
     // NOTE: The first thing we do here is clear the markers from the layer.
     markersLayer.clearLayers();
 
     const request = await fetch(dropDown_query + feature + "&value=Yes");
     let response = await request.json()
-
+    console.log(response)
     response.forEach((item) => {
         const latitude = item.latitude;
             const longitude = item.longitude;    		  
@@ -91,15 +92,15 @@ async function displayMarkersByFeature(myselect, mymap, markersLayer) {
         }); 
 }
 
-
+/**
+ * @param  {object} mymap : The map object from the loadMap function
+ * @param  {object} perimLayer : The layer object that contains the Prince George's county perimeter polygon
+ * @param  {object} countyPerimeter : An object that allows us to test if the toggle button is on or off
+ */
 function displayAreaCovered(mymap, perimLayer, countyPerimeter) {
     countyPerimeter.classList.toggle('active')
     if(countyPerimeter.classList[1]){  
-        // fetch('https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_database')
-        // .then(res => res.json())  
-        // .then(res => {
-        // Used PG County Atlas to get most of the coordinates.  https://www.pgatlas.com/
-        // 38.7286251,-76.9695288
+
         var polygon = L.polygon([
             [39.1297476, -76.8878470],
             [38.9658582, -77.0028848],
@@ -134,9 +135,13 @@ function displayAreaCovered(mymap, perimLayer, countyPerimeter) {
  
 
 /**
-* The main function that runs first when the index.html page is loaded. 
-*/
+ * @param  {Array} sectionDropdown
+ * @param  {object} markersLayer: A layer object related to the map. The markers are added to this layer, then the layer is added to the map for the markers to be visible
+ * @param  {object} mymap : The map object from the loadMap function
+ * @async
+ */
 async function displayMarkersBySectionRating(sectionDropdown,markersLayer,mymap) {
+    console.log(sectionDropdown)
     const section = sectionDropdown.options[sectionDropdown.selectedIndex].value;
     const readAPI = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_dynamodb';
     console.log("Displaying markers for school rating section: " + section);
@@ -147,8 +152,7 @@ async function displayMarkersBySectionRating(sectionDropdown,markersLayer,mymap)
     let response = await request.json()
  
     response.forEach((item) =>{
-       let numberYes = countYesForSection(item, section);
-       console.log(item['schoolName'], numberYes)        	 
+       let numberYes = countYesForSection(item, section);	 
               let latitude = item.latitude;
               let longitude = item.longitude;
  
@@ -175,7 +179,10 @@ async function displayMarkersBySectionRating(sectionDropdown,markersLayer,mymap)
           // return res;
     })
 }
-
+/**
+ * @param  {object} schoolData : An object of information about each school, sent from displayMarkersBySectionRating function
+ * @param  {string} section : A string of chosen section
+ */
 function countYesForSection(schoolData, section) {
 	var counter = 0;
 	Object.entries(schoolData).forEach(([key, value]) => {
@@ -204,7 +211,9 @@ function countYesForSection(schoolData, section) {
 	});	
 	return counter;
 }
-
+/**
+ * The main function that runs first when the index.html page is loaded. 
+ */
 function mainThread(){
     
     const mymap = loadMap()
@@ -213,7 +222,6 @@ function mainThread(){
     const myselect = document.querySelector(".feature_filters_drop_down");
     const countyPerimeter = document.querySelector(".toggle-btn")
     const sectionSelect = document.querySelector(".section_filters_drop_down")
-    console.log(typeof(myselect))
     populateEnvFeaturesDropDown(JSON_KEY_TO_OPTION_NAMES, myselect)
     myselect.addEventListener('change', (event) => {
         displayMarkersByFeature(myselect, mymap, markersLayer)

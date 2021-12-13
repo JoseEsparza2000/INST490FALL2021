@@ -1,6 +1,11 @@
+//Importing the readAPI endpoint from apiRoutes/api_endpoint.js
 import {readAPI} from "../apiRoutes/api_endpoint.js"
 
-
+/**
+ * Makes a request to the AWS DynamoDB to get the names of each school
+ * @param  {string} readAPI: The url for the readAPI endpoint
+ * @returns schoolNames: A string of every school name in the database
+ */
 async function schoolNamesDropDown(readAPI){
     const request = await fetch(readAPI)
     const response = await request.json()
@@ -11,6 +16,11 @@ async function schoolNamesDropDown(readAPI){
     
 }
 
+/**
+ * Appends the school names into the dropdown menu
+ * @param  {string} schoolNames: A string of every school name in the database
+ * @param  {object} dropDown: The object for the dropdown element in the survey.html file
+ */
 function populateDropDown(schoolNames, dropDown){
     
     schoolNames.forEach((item)=>{
@@ -24,7 +34,17 @@ function populateDropDown(schoolNames, dropDown){
 
 }
 
-async function populateSurvey(event,results){
+/**
+ * The function that populates the survey.html page
+ * @param  {object} event: The event triggered when a school is selected in the survey.html page
+ * @param  {object} section1_results: The object for the div html element with class name of section1_results
+ * @param  {object} section2_results: The object for the div html element with class name of section2_results
+ * @param  {object} section3_results: The object for the div html element with class name of section3_results
+ * @param  {object} section4_results: The object for the div html element with class name of section4_results
+ * @param  {object} section5_results: The object for the div html element with class name of section5_results
+ * @async
+ */
+async function populateSurvey(event, section1_results,section2_results,section3_results,section4_results,section5_results){
     console.log(event.target.value)
     const name = event.target.value
     const dropDown_query = 'https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/getDataByColumnName?columnName='
@@ -128,121 +148,157 @@ async function populateSurvey(event,results){
             "website"
     ]
 
-    const html = `
-    <div class="box has-text-centered">
-                                     
-        <p>Section 1: School Name - ${response[db_columnNames[0]]}</p><br>
-        <p>Section 1: Time Stamp - ${response[db_columnNames[1]]}</p><br>
-        <p>Section 1: Green School Certification - ${response[db_columnNames[2]]}</p><br>
-        <p>Section 1: Email - ${response[db_columnNames[3]]}</p><br>
-        <p>Section 1: Active Gardens: Vegetable Garden - ${response[db_columnNames[4]]}</p><br>
-        <p>Section 1: Active Gardens: Native Garden - ${response[db_columnNames[5]]}</p><br>
-        <p>Section 1: Active Gardens: Butterfly Garden - ${response[db_columnNames[6]]}</p><br>
-        <p>Section 1: Active Gardens: Rain Garden - ${response[db_columnNames[7]]}</p><br>
-        <p>Section 1: Active Gardens: Zen Garden - ${response[db_columnNames[8]]}</p><br>
-        <p>Section 1: Active Gardens: Herb Garden - ${response[db_columnNames[9]]}</p><br>
-        <p>Section 1: Active Gardens: No gardens on campus - ${response[db_columnNames[10]]}</p><br>
-        <p>Section 1: Active Gardens: I don't know - ${response[db_columnNames[11]]}</p><br>
-        <p>Section 1: Recycle: At Breakfast - ${response[db_columnNames[12]]}</p><br>
-        <p>Section 1: Recycle: At Lunch - ${response[db_columnNames[13]]}</p><br>
-        <p>Section 1: Recycle: In the classroom - ${response[db_columnNames[14]]}</p><br>
-        <p>Section 1: Recycle: Not at all - ${response[db_columnNames[15]]}</p><br>
-        <p>Section 1: Recycle: I don't know - ${response[db_columnNames[16]]}</p><br>
-        <p>Section 1: Recycling Program: Ink Cartridge Recycling - ${response[db_columnNames[17]]}</p><br>
-        <p>Section 1: Recycling Program: Cellphones, Batteries, Others - ${response[db_columnNames[18]]}</p><br>
-        <p>Section 1: Recycling Program: Terra Cycling - ${response[db_columnNames[19]]}</p><br>
-        <p>Section 1: Recycling Program: Color Cycle (Crayola) - ${response[db_columnNames[20]]}</p><br>
-        <p>Section 1: Recycling Program: Pepsi Recycle Rally - ${response[db_columnNames[21]]}</p><br>
-        <p>Section 1: Recycling Program: No Programs/Activities - ${response[db_columnNames[22]]}</p><br>
-        <p>Section 1: Recycling Program: I don't know - ${response[db_columnNames[23]]}</p><br>
-        <p>Section 1: Composting: No compost at school - ${response[db_columnNames[24]]}</p><br>
-        <p>Section 1: Composting: Vermiculture - ${response[db_columnNames[25]]}</p><br>
-        <p>Section 1: Composting: Drum Compost - ${response[db_columnNames[26]]}</p><br>
-        <p>Section 1: Composting: Open Frame - ${response[db_columnNames[27]]}</p><br>
-        <p>Section 1: Composting: Send to Local Facility/Farm - ${response[db_columnNames[28]]}</p><br>
-        <p>Section 1: Composting: I don't know - ${response[db_columnNames[29]]}</p><br>
-        <p>Section 1: Cleanup Volunteer Effort - ${response[db_columnNames[30]]}</p><br>
-        <p>Section 1: Waste Reduction Comments - ${response[db_columnNames[31]]}</p><br>
-        <p>Section 2: Reducing Water Strategy - ${response[db_columnNames[32]]}</p><br>
-        <p>Section 2: Stream - ${response[db_columnNames[33]]}</p><br>
-        <p>Section 2: Water Prevention: Stream Bank Planting - ${response[db_columnNames[34]]}</p><br>
-        <p>Section 2: Water Prevention: Erosion Control Project other than Stream Bank Planting - ${response[db_columnNames[35]]}</p><br>
-        <p>Section 2: Water Prevention: Painted Storm Drains - ${response[db_columnNames[36]]}</p><br>
-        <p>Section 2: Water Prevention: Raingarden/bioretention area planted - ${response[db_columnNames[37]]}</p><br>
-        <p>Section 2: Water Prevention: No-mow zone installed  - ${response[db_columnNames[38]]}</p><br>
-        <p>Section 2: Water Prevention: Rain barrels installed - ${response[db_columnNames[39]]}</p><br>
-        <p>Section 2: Water Prevention: Stream Cleaning - ${response[db_columnNames[40]]}</p><br>
-        <p>Section 2: Water Prevention: Collected litter to prevent water pollution - ${response[db_columnNames[41]]}</p><br>
-        <p>Section 2: Water Prevention: Turf Eduction - ${response[db_columnNames[42]]}</p><br>
-        <p>Section 2: Water Prevention: Impervious surface reduction - ${response[db_columnNames[43]]}</p><br>
-        <p>Section 2: Water Prevention: Green Roof - ${response[db_columnNames[44]]}</p><br>
-        <p>Section 2: Water Prevention: Retrofitted sinks, toilets, showers - ${response[db_columnNames[45]]}</p><br>
-        <p>Section 2: Runoff Strategy - ${response[db_columnNames[46]]}</p><br>
-        <p>Section 2: Water Conservation Comments - ${response[db_columnNames[47]]}</p><br>
-        <p>Section 3: Reduce Energy Strategy - ${response[db_columnNames[48]]}</p><br>
-        <p>Section 3: Energy Conservation: Installed efficient lighting - ${response[db_columnNames[49]]}</p><br>
-        <p>Section 3: Energy Conservation: Use Daylighting most of the day - ${response[db_columnNames[50]]}</p><br>
-        <p>Section 3: Energy Conservation: Delamped - ${response[db_columnNames[51]]}</p><br>
-        <p>Section 3: Energy Conservation: Planted trees to shade building - ${response[db_columnNames[52]]}</p><br>
-        <p>Section 3: Energy Conservation: Use of blinds in the classroom - ${response[db_columnNames[53]]}</p><br>
-        <p>Section 3: Renewable Energy - ${response[db_columnNames[54]]}</p><br>
-        <p>Section 3: Renewable Source: Solar - ${response[db_columnNames[55]]}</p><br>
-        <p>Section 3: Renewable Source: Wind - ${response[db_columnNames[56]]}</p><br>
-        <p>Section 3: Renewable Source: Geothermal - ${response[db_columnNames[57]]}</p><br>
-        <p>Section 3: Energy Conservation Comments - ${response[db_columnNames[58]]}</p><br>
-        <p>Section 4: Restore Habitat - ${response[db_columnNames[59]]}</p><br>
-        <p>Section 4: Habitat Restoration: Created/Installed bird houses - ${response[db_columnNames[60]]}</p><br>
-        <p>Section 4: Habitat Restoration: Planted Native Trees - ${response[db_columnNames[61]]}</p><br>
-        <p>Section 4: Habitat Restoration: Planted Native Shrubs - ${response[db_columnNames[62]]}</p><br>
-        <p>Section 4: Habitat Restoration: Removal of invasive species - ${response[db_columnNames[63]]}</p><br>
-        <p>Section 4: Habitat Restoration: Native habitat - meadows, wetlands or forests - ${response[db_columnNames[64]]}</p><br>
-        <p>Section 4: Habit Restoration Comments - ${response[db_columnNames[65]]}</p><br>
-        <p>Section 4: Environmental Learning Structures - ${response[db_columnNames[66]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Interpretive signage - ${response[db_columnNames[67]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Trails, pathways - ${response[db_columnNames[68]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Boardwalk, bridges - ${response[db_columnNames[69]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Tree/Plant ID Tags - ${response[db_columnNames[70]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Outdoor Classroom - ${response[db_columnNames[71]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Outdoor environmental art - ${response[db_columnNames[72]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Greenhouse - ${response[db_columnNames[73]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Tower garden - ${response[db_columnNames[74]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Weather Station - ${response[db_columnNames[75]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Pond - ${response[db_columnNames[76]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Hydroponics - ${response[db_columnNames[77]]}</p><br>
-        <p>Section 4: Env. Learning Struct.: Aquaponics - ${response[db_columnNames[78]]}</p><br>
-        <p>Section 4: Environmental Structure Comments - ${response[db_columnNames[79]]}</p><br>
-        <p>Section 5: No Idle Zone - ${response[db_columnNames[80]]}</p><br>
-        <p>Section 5: Formal Carpooling Program - ${response[db_columnNames[81]]}</p><br>
-        <p>Section 5: Parking for Electric, Hybrid Vehicle - ${response[db_columnNames[82]]}</p><br>
-        <p>Section 5: Grow/Donate Eat Food in Garden - ${response[db_columnNames[83]]}</p><br>
-        <p>Section 5: Green Cleaning Products - ${response[db_columnNames[84]]}</p><br>
-        <p>Section 5: Community Science Program - ${response[db_columnNames[85]]}</p><br>
-        <p>Section 6: Environmental Awards - ${response[db_columnNames[86]]}</p><br>
-        <p>Section 6: Actions Not Mentioned - ${response[db_columnNames[87]]}</p><br>
-        <p>Latitude - ${response[db_columnNames[88]]}</p><br>
-        <p>Longitude - ${response[db_columnNames[89]]}</p><br>
-        <a href="${response[db_columnNames[90]]}">Picture</a><br>
-        <p>Website - ${response[db_columnNames[91]]}</p><br>
-    </div>
-    `
+    const html1 = `
+    
+    <div class="box">         
+        <h1><strong>Section 1 Answers</strong></h1><br>            
+        <p><strong>Section 1: School Name - </strong></strong>${response[db_columnNames[0]]}</p><br>
+        <p><strong>Section 1: Time Stamp - </strong>${response[db_columnNames[1]]}</p><br>
+        <p><strong>Section 1: Green School Certification - </strong>${response[db_columnNames[2]]}</p><br>
+        <p><strong>Section 1: Email - </strong>${response[db_columnNames[3]]}</p><br>
+        <p><strong>Section 1: Active Gardens: Vegetable Garden - </strong>${response[db_columnNames[4]]}</p><br>
+        <p><strong>Section 1: Active Gardens: Native Garden - </strong>${response[db_columnNames[5]]}</p><br>
+        <p><strong>Section 1: Active Gardens: Butterfly Garden - </strong>${response[db_columnNames[6]]}</p><br>
+        <p><strong>Section 1: Active Gardens: Rain Garden - </strong>${response[db_columnNames[7]]}</p><br>
+        <p><strong>Section 1: Active Gardens: Zen Garden - </strong>${response[db_columnNames[8]]}</p><br>
+        <p><strong>Section 1: Active Gardens: Herb Garden - </strong>${response[db_columnNames[9]]}</p><br>
+        <p><strong>Section 1: Active Gardens: No gardens on campus - </strong>${response[db_columnNames[10]]}</p><br>
+        <p><strong>Section 1: Active Gardens: I don't know - </strong>${response[db_columnNames[11]]}</p><br>
+        <p><strong>Section 1: Recycle: At Breakfast - </strong>${response[db_columnNames[12]]}</p><br>
+        <p><strong>Section 1: Recycle: At Lunch - </strong>${response[db_columnNames[13]]}</p><br>
+        <p><strong>Section 1: Recycle: In the classroom - </strong>${response[db_columnNames[14]]}</p><br>
+        <p><strong>Section 1: Recycle: Not at all - </strong>${response[db_columnNames[15]]}</p><br>
+        <p><strong>Section 1: Recycle: I don't know - </strong>${response[db_columnNames[16]]}</p><br>
+        <p><strong>Section 1: Recycling Program: Ink Cartridge Recycling - </strong>${response[db_columnNames[17]]}</p><br>
+        <p><strong>Section 1: Recycling Program: Cellphones, Batteries, Others - </strong>${response[db_columnNames[18]]}</p><br>
+        <p><strong>Section 1: Recycling Program: Terra Cycling - </strong>${response[db_columnNames[19]]}</p><br>
+        <p><strong>Section 1: Recycling Program: Color Cycle (Crayola) - </strong>${response[db_columnNames[20]]}</p><br>
+        <p><strong>Section 1: Recycling Program: Pepsi Recycle Rally - </strong>${response[db_columnNames[21]]}</p><br>
+        <p><strong>Section 1: Recycling Program: No Programs/Activities - </strong>${response[db_columnNames[22]]}</p><br>
+        <p><strong>Section 1: Recycling Program: I don't know - </strong>${response[db_columnNames[23]]}</p><br>
+        <p><strong>Section 1: Composting: No compost at school - </strong>${response[db_columnNames[24]]}</p><br>
+        <p><strong>Section 1: Composting: Vermiculture - </strong>${response[db_columnNames[25]]}</p><br>
+        <p><strong>Section 1: Composting: Drum Compost - </strong>${response[db_columnNames[26]]}</p><br>
+        <p><strong>Section 1: Composting: Open Frame - </strong>${response[db_columnNames[27]]}</p><br>
+        <p><strong>Section 1: Composting: Send to Local Facility/Farm - </strong>${response[db_columnNames[28]]}</p><br>
+        <p><strong>Section 1: Composting: I don't know - </strong>${response[db_columnNames[29]]}</p><br>
+        <p><strong>Section 1: Cleanup Volunteer Effort - </strong>${response[db_columnNames[30]]}</p><br>
+        <p><strong>Section 1: Waste Reduction Comments - </strong>${response[db_columnNames[31]]}</p><br>
+    </div>`
 
     
-    results.innerHTML=html
+    section1_results.innerHTML=html1
+
+    const html2 = `
+    <div class="box">
+    <h1><strong>Section 2 Answers</strong></h1><br>
+    <p><strong>Section 2: Reducing Water Strategy - </strong>${response[db_columnNames[32]]}</p><br>
+    <p><strong>Section 2: Stream - </strong>${response[db_columnNames[33]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Stream Bank Planting - </strong>${response[db_columnNames[34]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Erosion Control Project other than Stream Bank Planting - </strong>${response[db_columnNames[35]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Painted Storm Drains - </strong>${response[db_columnNames[36]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Raingarden/bioretention area planted - </strong>${response[db_columnNames[37]]}</p><br>
+    <p><strong>Section 2: Water Prevention: No-mow zone installed  - </strong>${response[db_columnNames[38]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Rain barrels installed - </strong>${response[db_columnNames[39]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Stream Cleaning - </strong>${response[db_columnNames[40]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Collected litter to prevent water pollution - </strong>${response[db_columnNames[41]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Turf Eduction - </strong>${response[db_columnNames[42]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Impervious surface reduction - </strong>${response[db_columnNames[43]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Green Roof - </strong>${response[db_columnNames[44]]}</p><br>
+    <p><strong>Section 2: Water Prevention: Retrofitted sinks, toilets, showers - </strong>${response[db_columnNames[45]]}</p><br>
+    <p><strong>Section 2: Runoff Strategy - </strong>${response[db_columnNames[46]]}</p><br>
+    <p><strong>Section 2: Water Conservation Comments - </strong>${response[db_columnNames[47]]}</p><br>
+
+    </div>`
+    
+    section2_results.innerHTML= html2
+
+    const html3=`
+    <div class="box">
+    <h1><strong>Section 3 Answers</strong></h1><br>
+    <p><strong>Section 3: Reduce Energy Strategy - </strong>${response[db_columnNames[48]]}</p><br>
+    <p><strong>Section 3: Energy Conservation: Installed efficient lighting - </strong>${response[db_columnNames[49]]}</p><br>
+    <p><strong>Section 3: Energy Conservation: Use Daylighting most of the day - </strong>${response[db_columnNames[50]]}</p><br>
+    <p><strong>Section 3: Energy Conservation: Delamped - </strong>${response[db_columnNames[51]]}</p><br>
+    <p><strong>Section 3: Energy Conservation: Planted trees to shade building - </strong>${response[db_columnNames[52]]}</p><br>
+    <p><strong>Section 3: Energy Conservation: Use of blinds in the classroom - </strong>${response[db_columnNames[53]]}</p><br>
+    <p><strong>Section 3: Renewable Energy - </strong>${response[db_columnNames[54]]}</p><br>
+    <p><strong>Section 3: Renewable Source: Solar - </strong>${response[db_columnNames[55]]}</p><br>
+    <p><strong>Section 3: Renewable Source: Wind - </strong>${response[db_columnNames[56]]}</p><br>
+    <p><strong>Section 3: Renewable Source: Geothermal - </strong>${response[db_columnNames[57]]}</p><br>
+    <p><strong>Section 3: Energy Conservation Comments - </strong>${response[db_columnNames[58]]}</p><br>
+
+    </div>`
+    section3_results.innerHTML = html3
+
+    const html4=`
+    <div class="box">
+    <h1><strong>Section 4 Answers</strong></h1><br>
+    <p><strong>Section 4: Restore Habitat - </strong>${response[db_columnNames[59]]}</p><br>
+    <p><strong>Section 4: Habitat Restoration: Created/Installed bird houses - </strong>${response[db_columnNames[60]]}</p><br>
+    <p><strong>Section 4: Habitat Restoration: Planted Native Trees - </strong>${response[db_columnNames[61]]}</p><br>
+    <p><strong>Section 4: Habitat Restoration: Planted Native Shrubs - </strong>${response[db_columnNames[62]]}</p><br>
+    <p><strong>Section 4: Habitat Restoration: Removal of invasive species - </strong>${response[db_columnNames[63]]}</p><br>
+    <p><strong>Section 4: Habitat Restoration: Native habitat - meadows, wetlands or forests - </strong>${response[db_columnNames[64]]}</p><br>
+    <p><strong>Section 4: Habit Restoration Comments - </strong>${response[db_columnNames[65]]}</p><br>
+    <p><strong>Section 4: Environmental Learning Structures - </strong>${response[db_columnNames[66]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Interpretive signage - </strong>${response[db_columnNames[67]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Trails, pathways - </strong>${response[db_columnNames[68]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Boardwalk, bridges - </strong>${response[db_columnNames[69]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Tree/Plant ID Tags - </strong>${response[db_columnNames[70]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Outdoor Classroom - </strong>${response[db_columnNames[71]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Outdoor environmental art - </strong>${response[db_columnNames[72]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Greenhouse - </strong>${response[db_columnNames[73]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Tower garden - </strong>${response[db_columnNames[74]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Weather Station - </strong>${response[db_columnNames[75]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Pond - </strong>${response[db_columnNames[76]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Hydroponics - </strong>${response[db_columnNames[77]]}</p><br>
+    <p><strong>Section 4: Env. Learning Struct.: Aquaponics - </strong>${response[db_columnNames[78]]}</p><br>
+    <p><strong>Section 4: Environmental Structure Comments - </strong>${response[db_columnNames[79]]}</p><br>
+    </div>`
+
+    section4_results.innerHTML = html4
+
+    const html5 = `
+    <div class="box">
+    <h1><strong>Section 5 Answers</strong></h1><br>
+    <p><strong>Section 5: No Idle Zone - </strong>${response[db_columnNames[80]]}</p><br>
+    <p><strong>Section 5: Formal Carpooling Program - </strong>${response[db_columnNames[81]]}</p><br>
+    <p><strong>Section 5: Parking for Electric, Hybrid Vehicle - </strong>${response[db_columnNames[82]]}</p><br>
+    <p><strong>Section 5: Grow/Donate Eat Food in Garden - </strong>${response[db_columnNames[83]]}</p><br>
+    <p><strong>Section 5: Green Cleaning Products - </strong>${response[db_columnNames[84]]}</p><br>
+    <p><strong>Section 5: Community Science Program - </strong>${response[db_columnNames[85]]}</p><br>
+    <p><strong>Section 6: Environmental Awards - </strong>${response[db_columnNames[86]]}</p><br>
+    <p><strong>Section 6: Actions Not Mentioned - </strong>${response[db_columnNames[87]]}</p><br>
+    <p><strong>Latitude - </strong>${response[db_columnNames[88]]}</p><br>
+    <p><strong>Longitude - </strong>${response[db_columnNames[89]]}</p><br>
+    <a href="</strong>${response[db_columnNames[90]]}">Picture</a><br>
+    <p>Website - </strong>${response[db_columnNames[91]]}</p><br>
+    </div>`
+
+    section5_results.innerHTML = html5
 
 
 }
 
+/**
+ * The main function that is called when the survey.html page is loaded
+ */
 async function mainThread(){
     
     let schoolNames = await schoolNamesDropDown(readAPI)
     let dropDown = document.querySelector('.survey-dropDown')
-    let results = document.querySelector('.results')
+    let section1_results = document.querySelector('.section1_results')
+    let section2_results = document.querySelector('.section2_results')
+    let section3_results = document.querySelector('.section3_results')
+    let section4_results = document.querySelector('.section4_results')
+    let section5_results = document.querySelector('.section5_results')
     const selection = document.addEventListener('change',event =>{
-        populateSurvey(event, results)
+        populateSurvey(event, section1_results,section2_results,section3_results,section4_results,section5_results)
     })
 
     populateDropDown(schoolNames, dropDown)
 }
 
 window.onload=mainThread
-// })
+

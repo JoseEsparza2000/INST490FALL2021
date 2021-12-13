@@ -1,8 +1,8 @@
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 import gspread
 import boto3
-from boto3.dynamodb.conditions import Key
-from boto3.dynamodb.conditions import Attr
-
 
 #create an instance of the gspread client with the credentials in keys.json
 gc = gspread.service_account(filename='keys.json')
@@ -288,108 +288,124 @@ def getSchoolAdditionalInfo(schoolName, add_info):
             elif add_info == 'website':
                 return schoolInfo[4]
 
- 
+#The datetime module is used to obtain new survey data
 
-#loops through all of the rows in survey data and resets the database
+
+today=datetime.today()
+
+yesterday = today-timedelta(days=1)
+
+#loops through each row in the survey response
 for i in range(len(res)):
-    input = {  "pkey":i+1,
-                "schoolName":res[i]['What is the name of your school? '],
-                db_columnNames[1]: res[i]['Timestamp'],
-                db_columnNames[2]:res[i]['Email Address'],
-                db_columnNames[3]:res[i]['Does your school have a MD Green School Certification?'],
-                db_columnNames[4]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[0]),
-                db_columnNames[5]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[1]),
-                db_columnNames[6]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[2]),
-                db_columnNames[7]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[3]),
-                db_columnNames[8]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[4]),
-                db_columnNames[9]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[5]),
-                db_columnNames[10]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[6]),
-                db_columnNames[11]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[7]),
-                db_columnNames[12]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[0]),
-                db_columnNames[13]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[1]),
-                db_columnNames[14]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[2]),
-                db_columnNames[15]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[3]),
-                db_columnNames[16]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[4]),
-                db_columnNames[17]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[0]),
-                db_columnNames[18]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[1]),
-                db_columnNames[19]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[2]),
-                db_columnNames[20]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[3]),
-                db_columnNames[21]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[4]),
-                db_columnNames[22]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[5]),
-                db_columnNames[23]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[6]),
-                db_columnNames[24]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[0]),
-                db_columnNames[25]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[1]),
-                db_columnNames[26]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[2]),
-                db_columnNames[27]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[3]),
-                db_columnNames[28]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[4]),
-                db_columnNames[29]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[5]),
-                db_columnNames[30]:res[i]['Does your school participate in environmental cleanup volunteer efforts?'],
-                db_columnNames[31]:res[i]['Waste Reduction:  Other and Comments, also please explain if your school participates in other waste reduction efforts. '],
-                db_columnNames[32]:res[i]['Are strategies implemented to reduce water use in your school? '],
-                db_columnNames[33]:res[i]['Do you have a stream located on your school grounds? '],
-                db_columnNames[34]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Stream Bank Planting (Riparian Buffer)]'],
-                db_columnNames[35]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Erosion Control Project other than Stream Bank Planting]'],
-                db_columnNames[36]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Painted Storm Drains]'],
-                db_columnNames[37]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Raingarden/bioretention area planted]'],
-                db_columnNames[38]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [No-mow zone installed ]'],
-                db_columnNames[39]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Rain barrels installed]'],
-                db_columnNames[40]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Stream Cleaning (at your school or in the community)]'],
-                db_columnNames[41]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Collected litter to prevent water pollution]'],
-                db_columnNames[42]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Turf Eduction]'],
-                db_columnNames[43]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Impervious surface reduction]'],
-                db_columnNames[44]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Green Roof]'],
-                db_columnNames[45]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Retrofitted sinks, toilets, showers]'],
-                db_columnNames[46]:res[i]['Does your school implement strategies to reduce or improve runoff from the school grounds?'],
-                db_columnNames[47]:res[i]['Water Conservation:  Other and Comments, also please indicate if storm water management has been done or is taking place at your school on what has been/is being done.'],
-                db_columnNames[48]:res[i]['Does your school implement strategies to reduce energy use?'],
-                db_columnNames[49]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Installed efficient lighting]'],
-                db_columnNames[50]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Use Daylighting most of the day]'],
-                db_columnNames[51]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Delamped]'],
-                db_columnNames[52]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Planted trees to shade building]'],
-                db_columnNames[53]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Use of blinds in the classroom to control daylight and temperature]'],
-                db_columnNames[54]:res[i]['Does your school use renewable energy sources?'],
-                db_columnNames[55]:res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Solar]'],
-                db_columnNames[56]:res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Wind]'],
-                db_columnNames[57]:res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Geothermal]'],
-                db_columnNames[58]:res[i]['Energy Conservation:  Other and Comments, also please indicate if additional energy conservation practices or renewable energy sources are being implemented at your school. '],
-                db_columnNames[59]:res[i]['Did you restore habitat on your school grounds? '],
-                db_columnNames[60]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Created/Installed bird houses]'],
-                db_columnNames[61]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Planted Native Trees]'],
-                db_columnNames[62]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Planted Native Shrubs]'],
-                db_columnNames[63]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Removal of invasive species]'],
-                db_columnNames[64]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Created native habitat - meadows, wetlands or forests]'],
-                db_columnNames[65]:res[i]['Habitat Restoration:  Other and Comments, please describe other habitat restoration efforts at your school or that your school has done in the community. '],
-                db_columnNames[66]:res[i]['Does your school have structures for environmental learning on the school grounds? '],
-                db_columnNames[67]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Interpretive signage]'],
-                db_columnNames[68]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Trails, pathways]'],
-                db_columnNames[69]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Boardwalk, bridges]'],
-                db_columnNames[70]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Tree/Plant ID Tags]'],
-                db_columnNames[71]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Outdoor Classroom]'],
-                db_columnNames[72]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Outdoor environmental art]'],
-                db_columnNames[73]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Greenhouse]'],
-                db_columnNames[74]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Tower garden]'],
-                db_columnNames[75]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Weather Station]'],
-                db_columnNames[76]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Pond]'],
-                db_columnNames[77]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Hydroponics ]'],
-                db_columnNames[78]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Aquaponics]'],
-                db_columnNames[79]:res[i]['Structures for Environmental Learning:  Other and Comments, please describe other structures for environmental learning located on your school campus. '],
-                db_columnNames[80]:res[i]['Does your school have a No Idle Zone?'],
-                db_columnNames[81]:res[i]['Does your school have a formal carpooling program? '],
-                db_columnNames[82]:res[i]['Does your school have parking spaces designated for electric, hybrid, or energy efficient vehicles? '],
-                db_columnNames[83]:res[i]['Does your school grow and donate and/or eat healthy food in school gardens?'],
-                db_columnNames[84]:res[i]['Does your school utilize green cleaning products?'],
-                db_columnNames[85]:res[i]['Does your school participate in one or more Citizen Science/Community Science programs such as GLOBE, GLOBE Observer, iTree, iNaturalist or other citizen science/ community science protocol to better understand the school environment and how citizen science/community science is used?'],
-                db_columnNames[86]:res[i]['Has your school received any awards or special recognition based on your enviornmental actions or instruction? '],
-                db_columnNames[87]:res[i]['Are there any other environmentally friendly actions your school takes that have not been mentioned in this survey?'],
-                db_columnNames[88]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'latitude'),
-                db_columnNames[89]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'longitude'),
-                db_columnNames[90]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'picture'),
-                db_columnNames[91]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'website')
-              }
-    table.put_item(Item=input)
+    
+    #gets the time of the latest update
+    latest_update=res[i]['Timestamp']
 
-
-
-
-
-                
+    #changing the latest_update datetime to the right format
+    latest_update=datetime.strptime(latest_update, '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%d')
+    latest_update = datetime.strptime(latest_update, '%Y-%m-%d')
+    
+    #checks if the latest_update is more recent than yesterday, i.e has there been an update to the survey since yesterday
+    #if there was a new update, thy database is updated with the new data
+    if latest_update > yesterday:
+        for i in range(len(res)):
+            input = {  "pkey":i+1,
+                        "schoolName":res[i]['What is the name of your school? '],
+                        db_columnNames[1]: res[i]['Timestamp'],
+                        db_columnNames[2]:res[i]['Email Address'],
+                        db_columnNames[3]:res[i]['Does your school have a MD Green School Certification?'],
+                        db_columnNames[4]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[0]),
+                        db_columnNames[5]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[1]),
+                        db_columnNames[6]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[2]),
+                        db_columnNames[7]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[3]),
+                        db_columnNames[8]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[4]),
+                        db_columnNames[9]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[5]),
+                        db_columnNames[10]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[6]),
+                        db_columnNames[11]:getValuesForActiveGargen(res[i]['Does your school have an active garden? (Check all that apply)'], ACTIVE_GARDENS[7]),
+                        db_columnNames[12]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[0]),
+                        db_columnNames[13]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[1]),
+                        db_columnNames[14]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[2]),
+                        db_columnNames[15]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[3]),
+                        db_columnNames[16]:getValuesForRecycle(res[i]['Does your school actively recycle? (Check all that apply)'], RECYCLE[4]),
+                        db_columnNames[17]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[0]),
+                        db_columnNames[18]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[1]),
+                        db_columnNames[19]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[2]),
+                        db_columnNames[20]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[3]),
+                        db_columnNames[21]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[4]),
+                        db_columnNames[22]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[5]),
+                        db_columnNames[23]:getValuesForRecyclingProgram(res[i]['Does your school participate in any of the following Recycling Programs/Activities? (Check all that apply)'],RECYCLING_PROGRAMS[6]),
+                        db_columnNames[24]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[0]),
+                        db_columnNames[25]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[1]),
+                        db_columnNames[26]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[2]),
+                        db_columnNames[27]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[3]),
+                        db_columnNames[28]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[4]),
+                        db_columnNames[29]:getValuesForComposting(res[i]['What type of composting is implemented at your school? '],COMPOSTING[5]),
+                        db_columnNames[30]:res[i]['Does your school participate in environmental cleanup volunteer efforts?'],
+                        db_columnNames[31]:res[i]['Waste Reduction:  Other and Comments, also please explain if your school participates in other waste reduction efforts. '],
+                        db_columnNames[32]:res[i]['Are strategies implemented to reduce water use in your school? '],
+                        db_columnNames[33]:res[i]['Do you have a stream located on your school grounds? '],
+                        db_columnNames[34]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Stream Bank Planting (Riparian Buffer)]'],
+                        db_columnNames[35]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Erosion Control Project other than Stream Bank Planting]'],
+                        db_columnNames[36]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Painted Storm Drains]'],
+                        db_columnNames[37]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Raingarden/bioretention area planted]'],
+                        db_columnNames[38]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [No-mow zone installed ]'],
+                        db_columnNames[39]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Rain barrels installed]'],
+                        db_columnNames[40]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Stream Cleaning (at your school or in the community)]'],
+                        db_columnNames[41]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Collected litter to prevent water pollution]'],
+                        db_columnNames[42]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Turf Eduction]'],
+                        db_columnNames[43]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Impervious surface reduction]'],
+                        db_columnNames[44]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Green Roof]'],
+                        db_columnNames[45]:res[i]['Has your school completed any of the following Water Conservation/Water Pollution Prevention actions? Please provide an answer in each row.  [Retrofitted sinks, toilets, showers]'],
+                        db_columnNames[46]:res[i]['Does your school implement strategies to reduce or improve runoff from the school grounds?'],
+                        db_columnNames[47]:res[i]['Water Conservation:  Other and Comments, also please indicate if storm water management has been done or is taking place at your school on what has been/is being done.'],
+                        db_columnNames[48]:res[i]['Does your school implement strategies to reduce energy use?'],
+                        db_columnNames[49]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Installed efficient lighting]'],
+                        db_columnNames[50]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Use Daylighting most of the day]'],
+                        db_columnNames[51]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Delamped]'],
+                        db_columnNames[52]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Planted trees to shade building]'],
+                        db_columnNames[53]:res[i]['Has your school completed the following Energy Conservation actions? Please provide an answer in each row.  [Use of blinds in the classroom to control daylight and temperature]'],
+                        db_columnNames[54]:res[i]['Does your school use renewable energy sources?'],
+                        db_columnNames[55]:res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Solar]'],
+                        db_columnNames[56]:res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Wind]'],
+                        db_columnNames[57]:res[i]['Please indicate the renewable energy sources that your school uses? Please provide an answer for each row.  [Geothermal]'],
+                        db_columnNames[58]:res[i]['Energy Conservation:  Other and Comments, also please indicate if additional energy conservation practices or renewable energy sources are being implemented at your school. '],
+                        db_columnNames[59]:res[i]['Did you restore habitat on your school grounds? '],
+                        db_columnNames[60]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Created/Installed bird houses]'],
+                        db_columnNames[61]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Planted Native Trees]'],
+                        db_columnNames[62]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Planted Native Shrubs]'],
+                        db_columnNames[63]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Removal of invasive species]'],
+                        db_columnNames[64]:res[i]['Please indicate the habitat restoration actions that your school has implemented? Please provide an answer for each row.  [Created native habitat - meadows, wetlands or forests]'],
+                        db_columnNames[65]:res[i]['Habitat Restoration:  Other and Comments, please describe other habitat restoration efforts at your school or that your school has done in the community. '],
+                        db_columnNames[66]:res[i]['Does your school have structures for environmental learning on the school grounds? '],
+                        db_columnNames[67]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Interpretive signage]'],
+                        db_columnNames[68]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Trails, pathways]'],
+                        db_columnNames[69]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Boardwalk, bridges]'],
+                        db_columnNames[70]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Tree/Plant ID Tags]'],
+                        db_columnNames[71]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Outdoor Classroom]'],
+                        db_columnNames[72]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Outdoor environmental art]'],
+                        db_columnNames[73]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Greenhouse]'],
+                        db_columnNames[74]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Tower garden]'],
+                        db_columnNames[75]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Weather Station]'],
+                        db_columnNames[76]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Pond]'],
+                        db_columnNames[77]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Hydroponics ]'],
+                        db_columnNames[78]:res[i]['Please indicate the structures for environmental learning located on your school grounds. Please provide an answer for each row.  [Aquaponics]'],
+                        db_columnNames[79]:res[i]['Structures for Environmental Learning:  Other and Comments, please describe other structures for environmental learning located on your school campus. '],
+                        db_columnNames[80]:res[i]['Does your school have a No Idle Zone?'],
+                        db_columnNames[81]:res[i]['Does your school have a formal carpooling program? '],
+                        db_columnNames[82]:res[i]['Does your school have parking spaces designated for electric, hybrid, or energy efficient vehicles? '],
+                        db_columnNames[83]:res[i]['Does your school grow and donate and/or eat healthy food in school gardens?'],
+                        db_columnNames[84]:res[i]['Does your school utilize green cleaning products?'],
+                        db_columnNames[85]:res[i]['Does your school participate in one or more Citizen Science/Community Science programs such as GLOBE, GLOBE Observer, iTree, iNaturalist or other citizen science/ community science protocol to better understand the school environment and how citizen science/community science is used?'],
+                        db_columnNames[86]:res[i]['Has your school received any awards or special recognition based on your enviornmental actions or instruction? '],
+                        db_columnNames[87]:res[i]['Are there any other environmentally friendly actions your school takes that have not been mentioned in this survey?'],
+                        db_columnNames[88]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'latitude'),
+                        db_columnNames[89]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'longitude'),
+                        db_columnNames[90]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'picture'),
+                        db_columnNames[91]:getSchoolAdditionalInfo(res[i]['What is the name of your school? '],'website')
+                }
+        table.put_item(Item=input)
+    else:
+        response = ('[{"status":"No New Data."}]')
+return response
+# print(latest_update)
+# today=datetime.datetime.strftime(today, '%m/%d/%Y')

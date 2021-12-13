@@ -1,5 +1,10 @@
-import {JSON_KEY_TO_OPTION_NAMES} from './api_endpoint.js'
+//import the JSON_KEY_TO_OPTION_NAMES from apiRoutes/api_endpoint.js
+import {JSON_KEY_TO_OPTION_NAMES} from '../apiRoutes/api_endpoint.js'
 
+/**
+ * This function populates the documentation.html page.
+ * @param  {object} JSON_KEY_TO_OPTION_NAMES: A Map object that contains the appropriate titles for the sections
+ */
 function populateEnvFeaturesDocumentation(JSON_KEY_TO_OPTION_NAMES) {
 	console.log("Populating Environmental Features documentation.");
    
@@ -29,6 +34,9 @@ function populateEnvFeaturesDocumentation(JSON_KEY_TO_OPTION_NAMES) {
 	}
 }
 
+/**
+ * The main function that is called when the documentation.html page is loaded
+ */
 function mainThread(){
 
     populateEnvFeaturesDocumentation(JSON_KEY_TO_OPTION_NAMES)
