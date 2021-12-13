@@ -5,24 +5,26 @@
 <p>Link to Website Training Slides: https://docs.google.com/presentation/d/1OQ-8fBUHc2Ix9d-vUoNaXNLmy-5ytW6aA5e7cpvRRtM/edit?usp=sharing</p><br/>
 
 # Developer Manual
-<h1>Libraries Used</h1>
+<h1>Libraries, Frameworks and SDKs Used</h1>
   <ol>
-    <li>Bulma (CSS)</li>
-    <li>Express (JS) </li>
-    <li>boto3 (Python) </li>
-    <li>gspread (Python) </li>
+    <li>Bulma (CSS Framework)</li>
+    <li>Express (JavaScript Framework)</li>
+    <li>Leaflet (JavaScript Library)</li>
+    <li>boto3 (Python SDK) </li>
+    <li>gspread (Python Library) </li>
   </ol>
 <h1>How to run application on a local server </h1>
   <ol>
-    <li>Execute 'npm start' command</li>
+    <li>Execute 'npm install' command in a terminal inside the appropriate directory</li>
+    <li>Execute 'npm start' command next in the same terminal</li>
     <li>Open browser and connect to the local host</li>
-    <li>http://localhost</li>
+    <li>http://localhost/index.html</li>
   </ol>
 <h1>How to run tests </h1>
   <ol>
-    <li>Click through the various drop down menus and radio buttons, and markers should appear on the visualization.</li>
+    <li>Click through the various drop down menus and markers should appear on the visualization.</li>
   </ol>
-<h1>The API Endpoints for the database access </h1>  
+<h1>The AWS API Gateway API Endpoints for the database access </h1>  
   <ol>
     <li>Getting all data from database</li>
       <ul> `https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_database` </ul>
