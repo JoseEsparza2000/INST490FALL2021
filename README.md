@@ -24,7 +24,7 @@
   <ol>
     <li>Click through the various drop down menus and markers should appear on the visualization.</li>
   </ol>
-<h1>The AWS API Gateway API Endpoints for the database access </h1>  
+<h1>The AWS API Gateway Endpoints for the database access </h1>  
   <ol>
     <li>Getting all data from database</li>
       <ul> `https://voyn795bv9.execute-api.us-east-1.amazonaws.com/Dev/read_all_database` </ul>
